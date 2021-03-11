@@ -1,33 +1,29 @@
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import { blue, indigo } from '@material-ui/core/colors';
-import './App.css';
-import Routes from './Routes'
+import { Suspense, Fragment, lazy } from 'react';
+import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
+import 'fontsource-roboto';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import theme from './theme';
+import GlobalStyles from './GlobalStyles';
+import Pace from './components/Pace';
 
-const theme = createMuiTheme({
-  palette: {
-    secondary: {
-      main: blue[900]
-    },
-    primary: {
-      main: indigo[700]
-    }
-  },
-  typography: {
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '"Lato"',
-      'sans-serif'
-    ].join(',')
-  }
-});
+const MainComponent = lazy(() => import("./components/Main"));
 
 function App() {
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-        <Routes />
-      </ThemeProvider>
-    </div>
+    <BrowserRouter>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <GlobalStyles />
+        <Pace color={theme.palette.primary.light} />
+        <Suspense fallback={<Fragment />}>
+          <Switch>
+            <Route>
+              <MainComponent />
+            </Route>
+          </Switch>
+        </Suspense>
+      </MuiThemeProvider>
+    </BrowserRouter>
   );
 }
 
