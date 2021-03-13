@@ -12,6 +12,7 @@ import {
   isWidthUp,
 } from "@material-ui/core";
 import WaveBorder from "./WaveBorder";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
     extraLargeButtonLabel: {
@@ -143,8 +144,10 @@ function Home(props) {
                           fullWidth
                           className={classes.extraLargeButton}
                           classes={{ label: classes.extraLargeButtonLabel }}
+                          component={Link}
+                          to={'/survey'}
                         >
-                          Susikurk ir tu
+                          Create Survey
                         </Button>
                       </div>
                     </Box>
@@ -173,5 +176,5 @@ Home.propTypes = {
 };
 
 export default withWidth()(
-    withStyles(styles, { withTheme: true })(Home)
-  );
+  withStyles(styles, { withTheme: true })(Home)
+);

@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import {
@@ -8,7 +8,9 @@ import {
   Button,
   Hidden,
   IconButton,
-  withStyles
+  withStyles,
+  Fab,
+  Box
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
@@ -16,6 +18,7 @@ import HowToRegIcon from "@material-ui/icons/HowToReg";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import BookIcon from "@material-ui/icons/Book";
 import NavigationDrawer from "./NavigationDrawer";
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   appBar: {
@@ -36,7 +39,13 @@ const styles = theme => ({
   },
   noDecoration: {
     textDecoration: "none !important"
-  }
+  },
+  createSurvey: {
+    marginLeft: theme.spacing(2),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
 });
 
 function NavBar(props) {
@@ -44,6 +53,7 @@ function NavBar(props) {
     classes,
     openRegisterDialog,
     openLoginDialog,
+    handleSurveyCreateOpen,
     handleMobileDrawerOpen,
     handleMobileDrawerClose,
     mobileDrawerOpen,
@@ -71,28 +81,49 @@ function NavBar(props) {
       icon: <LockOpenIcon className="text-white" />
     }
   ];
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <div>
-            <Typography
-              variant="h4"
-              className={classes.brandText}
-              display="inline"
-              color="primary"
+          <Box display="flex">
+            <Link to={"/"} className={classes.noDecoration}>
+              <Typography
+                variant="h4"
+                className={classes.brandText}
+                display="inline"
+                color="primary"
+              >
+                Sur
+              </Typography>
+              <Typography
+                variant="h4"
+                className={classes.brandText}
+                display="inline"
+                color="secondary"
+              >
+                vey
+              </Typography>
+            </Link>
+            <Fab 
+              variant="extended"
+              aria-label="Create Survey"
+              onClick={handleSurveyCreateOpen}
+              className={classes.createSurvey}
+              color="inherit"
+              component={Link} 
+              to='/survey'
             >
-              Sur
-            </Typography>
-            <Typography
-              variant="h4"
-              className={classes.brandText}
-              display="inline"
-              color="secondary"
-            >
-              vey
-            </Typography>
-          </div>
+              <AddIcon color="primary" className={classes.extendedIcon}/>
+              <Typography
+                variant="h6"
+                display="inline"
+                color="primary"
+              >
+                Create
+              </Typography>
+            </Fab>
+          </Box>
           <div>
             <Hidden mdUp>
               <IconButton

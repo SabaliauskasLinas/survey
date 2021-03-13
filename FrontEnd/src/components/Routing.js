@@ -4,6 +4,7 @@ import { Switch } from "react-router-dom";
 import Home from "./home/Home";
 import Surveys from "./survey/Surveys";
 import PropsRoute from "./navigation/PropsRoute";
+import SurveyCreate from "./survey/SurveyCreate";
 
 function Routing(props) {
   const { blogPosts, selectSurveys, selectHome } = props;
@@ -27,6 +28,13 @@ function Routing(props) {
         exact
         path="/surveys"
         component={Surveys}
+        selectSurveys={selectSurveys}
+        blogPosts={blogPosts}
+      />
+      <PropsRoute
+        exact
+        path="/survey"
+        component={SurveyCreate}
         selectSurveys={selectSurveys}
         blogPosts={blogPosts}
       />

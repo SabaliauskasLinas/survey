@@ -35,6 +35,12 @@ function Main(props) {
     setSelectedTab("Surveys");
   }, [setSelectedTab]);
 
+  const handleSurveyCreateOpen = useCallback(() => {
+    smoothScrollTop();
+    document.title = "Survey Create";
+    setSelectedTab("SurveyCreate");
+  }, [setSelectedTab]);
+
   const handleMobileDrawerOpen = useCallback(() => {
     setIsMobileDrawerOpen(true);
   }, [setIsMobileDrawerOpen]);
@@ -68,6 +74,7 @@ function Main(props) {
         selectedTab={selectedTab}
         selectTab={setSelectedTab}
         mobileDrawerOpen={isMobileDrawerOpen}
+        handleSurveyCreateOpen={handleSurveyCreateOpen}
         handleMobileDrawerOpen={handleMobileDrawerOpen}
         handleMobileDrawerClose={handleMobileDrawerClose}
       />
