@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import {
@@ -9,7 +9,6 @@ import {
   Hidden,
   IconButton,
   withStyles,
-  Fab,
   Box
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -40,12 +39,9 @@ const styles = theme => ({
   noDecoration: {
     textDecoration: "none !important"
   },
-  createSurvey: {
-    marginLeft: theme.spacing(2),
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
+  createSurveyButton: {
+    marginLeft: theme.spacing(3),
+  }
 });
 
 function NavBar(props) {
@@ -94,35 +90,29 @@ function NavBar(props) {
                 display="inline"
                 color="primary"
               >
-                Sur
+                Survey
               </Typography>
-              <Typography
+              {/* <Typography
                 variant="h4"
                 className={classes.brandText}
                 display="inline"
                 color="secondary"
               >
                 vey
-              </Typography>
+              </Typography> */}
             </Link>
-            <Fab 
-              variant="extended"
-              aria-label="Create Survey"
-              onClick={handleSurveyCreateOpen}
-              className={classes.createSurvey}
-              color="inherit"
-              component={Link} 
+            <Button
+              component={Link}
               to='/survey'
+              variant="outlined"
+              color="primary"
+              className={classes.createSurveyButton}
+              startIcon={<AddIcon />}
+              size="large"
+              onClick={handleSurveyCreateOpen}
             >
-              <AddIcon color="primary" className={classes.extendedIcon}/>
-              <Typography
-                variant="h6"
-                display="inline"
-                color="primary"
-              >
-                Create
-              </Typography>
-            </Fab>
+              Create
+            </Button>
           </Box>
           <div>
             <Hidden mdUp>
@@ -187,8 +177,8 @@ NavBar.propTypes = {
   handleMobileDrawerClose: PropTypes.func,
   mobileDrawerOpen: PropTypes.bool,
   selectedTab: PropTypes.string,
-  openRegisterDialog: PropTypes.func.isRequired,
-  openLoginDialog: PropTypes.func.isRequired
+  //openRegisterDialog: PropTypes.func.isRequired,
+  //openLoginDialog: PropTypes.func.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(memo(NavBar));

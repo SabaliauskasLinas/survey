@@ -1,10 +1,10 @@
-import { Box, withStyles, withWidth } from '@material-ui/core';
+import { Box, Card, CardContent, withStyles, withWidth, TextField } from '@material-ui/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
+import { isEmptyOrSpaces } from '../../helpers/stringHelper';
 
 const styles = (theme) => ({
     card: {
-      boxShadow: theme.shadows[4],
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(2),
       [theme.breakpoints.up("xs")]: {
@@ -46,15 +46,69 @@ const styles = (theme) => ({
         marginBottom: theme.spacing(3),
       },
     },
+    containerFix: {
+      [theme.breakpoints.up("md")]: {
+        maxWidth: "none !important",
+      },
+    },
   });
 
 function SurveyCreate(props) {
     const { classes } = props;
+    const initialTitle = 'Untitled survey';
+    const [title, setTitle] = useState(initialTitle);
+    const [description, setDescription] = useState('');
+    const [raised, setRaised] = useState(false);
+
+    const handleTitleChange = (e) => {
+      setTitle(e.target.value);
+    };
+
+    const handleTitleBlur = (e) => {
+      if(isEmptyOrSpaces(e.target.value))
+        setTitle(initialTitle);
+    };
+
+    const handleDescriptionChange = (e) => {
+      setDescription(e.target.value);
+    };
+
+    const toggleRaised = (e) => {
+      setRaised(!raised);
+    };
     return (
         <div className={"lg-p-top"}>
             <div className={classNames("container-fluid", classes.container)}>
                 <Box display="flex" justifyContent="center" className="row">
-                    Nu sukuriam
+                  <form>
+                    <Card 
+                      className={classes.card}
+                      raised={raised}
+                      onMouseOver={toggleRaised}
+                      onMouseOut={toggleRaised}
+                    >
+                        <CardContent>
+                          <TextField 
+                            autoFocus
+                            value={title} 
+                            onChange={handleTitleChange} 
+                            onBlur={handleTitleBlur}
+                            required
+                            multiline
+                            fullWidth
+                            placeholder='Survey title'
+                            inputProps={{ style: { fontSize: 35, lineHeight: 1.5 } }}
+                          />
+                          <TextField 
+                            value={description}
+                            onChange={handleDescriptionChange} 
+                            multiline
+                            fullWidth
+                            placeholder='Survey description'
+                          />
+                        </CardContent>
+                    </Card>
+                  </form>
                 </Box>
             </div>
         </div>

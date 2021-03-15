@@ -114,7 +114,7 @@ function Home(props) {
             >
               <div className={classNames(classes.containerFix, "container")}>
                 <Box justifyContent="space-between" className="row">
-                  <Grid item xs={12} md={5}>
+                  <Grid item> {/* xs={12} md={5}> */}
                     <Box
                       display="flex"
                       flexDirection="column"
@@ -160,7 +160,7 @@ function Home(props) {
       </div>
       <WaveBorder
         upperColor={theme.palette.secondary.main}
-        lowerColor="#FFFFFF"
+        lowerColor="#f5f5f5"
         className={classes.waveBorder}
         animationNegativeDelay={2}
       />

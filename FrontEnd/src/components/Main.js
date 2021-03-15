@@ -12,7 +12,7 @@ import smoothScrollTop from "../helpers/smoothScrollTop";
 
 const styles = (theme) => ({
   wrapper: {
-    backgroundColor: theme.palette.common.white,
+    //backgroundColor: theme.palette.common.white,
     overflowX: "hidden",
   },
 });

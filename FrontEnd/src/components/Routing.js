@@ -46,7 +46,7 @@ function Routing(props) {
 Routing.propTypes = {
   blogPosts: PropTypes.arrayOf(PropTypes.object),
   selectHome: PropTypes.func.isRequired,
-  selectBlog: PropTypes.func.isRequired,
+  selectSurveys: PropTypes.func.isRequired,
 };
 
 export default memo(Routing);
