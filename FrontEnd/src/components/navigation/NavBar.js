@@ -33,7 +33,7 @@ const styles = theme => ({
     fontWeight: theme.typography.h6.fontWeight
   },
   brandText: {
-    fontFamily: "'Baloo Bhaijaan', cursive",
+    fontFamily: "'Roboto', cursive",
     fontWeight: 800
   },
   noDecoration: {
@@ -90,16 +90,16 @@ function NavBar(props) {
                 display="inline"
                 color="primary"
               >
-                Survey
+                i
               </Typography>
-              {/* <Typography
+              <Typography
                 variant="h4"
                 className={classes.brandText}
                 display="inline"
                 color="secondary"
               >
-                vey
-              </Typography> */}
+                Wonder
+              </Typography>
             </Link>
             <Button
               component={Link}
@@ -135,7 +135,7 @@ function NavBar(props) {
                       onClick={handleMobileDrawerClose}
                     >
                       <Button
-                        color="secondary"
+                        color="primary"
                         size="large"
                         classes={{ text: classes.menuButtonText }}
                       >
@@ -146,7 +146,7 @@ function NavBar(props) {
                 }
                 return (
                   <Button
-                    color="secondary"
+                    color="primary"
                     size="large"
                     onClick={element.onClick}
                     classes={{ text: classes.menuButtonText }}
