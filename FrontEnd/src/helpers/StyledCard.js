@@ -44,7 +44,6 @@ function StyledCard(props) {
             onMouseOver={toggleRaised}
             onMouseOut={toggleRaised}
             raised={raised}
-            {...props}
         >
             {props.children}
         </Card>

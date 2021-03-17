@@ -1,7 +1,8 @@
-import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, ListItemText, CardHeader, Avatar, CardActions, Button, FormControlLabel, Switch, Divider, IconButton } from '@material-ui/core';
-import { CheckBox, Delete, LinearScale, RadioButtonChecked, ShortText, Subject } from '@material-ui/icons';
+import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Fab, Grid, Button } from '@material-ui/core';
+import { CheckBox, Delete, LinearScale, RadioButtonChecked, ShortText, Subject, Add } from '@material-ui/icons';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Prompt } from 'react-router';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
 import StyledCard from '../../helpers/StyledCard';
 
@@ -28,14 +29,29 @@ const styles = (theme) => ({
       display: "flex",
       justifyContent: "space-between"
     },
-    question: {
-      width: "50%"
-    },
-    type: {
-      width: "40%"
-    },
     answer: {
       margin: theme.spacing(2)
+    },
+    fab: {
+      position: 'fixed',
+      bottom: theme.spacing(8),
+      right: theme.spacing(10),
+      [theme.breakpoints.down("md")]: {
+        bottom: theme.spacing(8),
+        right: theme.spacing(8),
+      },
+      [theme.breakpoints.down("sm")]: {
+        bottom: theme.spacing(8),
+        right: theme.spacing(6),
+      },
+      [theme.breakpoints.down("sm")]: {
+        bottom: theme.spacing(8),
+        right: theme.spacing(2),
+      },
+      [theme.breakpoints.down("xs")]: {
+        bottom: theme.spacing(8),
+        right: theme.spacing(1),
+      },
     }
 });
 
@@ -80,7 +96,7 @@ function QuestionTypes() {
         <ListItemIcon>
           {item.icon}
         </ListItemIcon>
-        <ListItemText primary={item.text} />
+        {item.text}
       </MenuItem>
     ))
   )
@@ -92,7 +108,7 @@ function AnswerControl(props) {
     case 1: {
       return (
         <TextField 
-          placeholder='Short answer'
+          placeholder='Short answer text'
           color='secondary'
           disabled
           style={{width: '40%'}}
@@ -104,11 +120,19 @@ function AnswerControl(props) {
         <TextField 
           multiline
           fullWidth
-          placeholder='Long answer'
+          placeholder='Long answer text'
           color='secondary'
           disabled
         />
       )
+    }
+    default: {
+      <TextField 
+          placeholder='Short answer text'
+          color='secondary'
+          disabled
+          style={{width: '40%'}}
+      />
     }
   }
 }
@@ -118,9 +142,17 @@ function SurveyCreate(props) {
     const initialTitle = 'Untitled survey';
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState('');
-    const [questions, setQuestions] = useState([{order: 1, typeId: 1}, {order: 2, typeId: 2, required: true}]);
+    const [questions, setQuestions] = useState([{ typeId: 1, required: false, key: Math.random() }]);
+    const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
 
-    //setQuestions([{}])
+    const handleAddClick = () => { 
+      setQuestions(oldQuestions => [...oldQuestions, { typeId: 1, required: false, key: Math.random() }])
+    };
+
+    const handleDeleteClick = index => e => {
+      questions.splice(index, 1);
+      setQuestions([...questions]);
+    };
 
     const handleTitleChange = (e) => {
       setTitle(e.target.value);
@@ -139,22 +171,36 @@ function SurveyCreate(props) {
       let newQuestions = [...questions];
       newQuestions[index].question = e.target.value;
       setQuestions(newQuestions);
-    }
+    };
 
     const handleTypeChange = index => e => {
       let newQuestions = [...questions];
       newQuestions[index].typeId = e.target.value;
       setQuestions(newQuestions);
-    }
+    };
     
     const handleRequiredChange = index => e => {
       let newQuestions = [...questions];
       newQuestions[index].required = e.target.checked;
       setQuestions(newQuestions);
-    }
+    };
+
+    const Warning = () => (
+      <React.Fragment>
+        <Prompt
+          when={shouldBlockNavigation}
+          message='You have unsaved changes, are you sure you want to leave?'
+        />
+      </React.Fragment>
+    );
+
+    useEffect(() => {
+      if(shouldBlockNavigation)
+        window.onbeforeunload = () => true
+    })
 
     return (
-        <div className={"lg-p-top"}>
+        <div className={"sm-p-top"}>
             <div className={classNames("container-fluid", classes.container)}>
                 <Box display="flex" justifyContent="center" className="row">
                   <StyledCard>
@@ -191,35 +237,41 @@ function SurveyCreate(props) {
                     </CardContent>
                   </StyledCard>
                   { questions.map((item, index) => (
-                    <StyledCard key={`question-${index}`}>
+                    <StyledCard key={`question-${item.key}`}>
                       <CardContent>
-                        <div className={classes.inlineInputs}>
-                          <TextField 
-                            multiline
-                            placeholder='Question'
-                            variant="filled"
-                            className={classes.question}
-                            color='secondary'
-                            onChange={handleQuestionChange(index)}
-                            value={item.title}
-                          />
-                          <Select 
-                            className={classes.type} 
-                            variant="outlined" 
-                            color='secondary' 
-                            onChange={handleTypeChange(index)}
-                            value={item.typeId}
-                          >
-                            { QuestionTypes() }
-                          </Select>
-                        </div>
+                        <Grid container spacing={5}>
+                          <Grid item xs={12} md={8}>
+                            <TextField 
+                              multiline
+                              placeholder='Question'
+                              variant="filled"
+                              className={classes.question}
+                              color='secondary'
+                              onChange={handleQuestionChange(index)}
+                              value={item.title}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <Select 
+                              className={classes.type} 
+                              variant="outlined" 
+                              color='secondary' 
+                              onChange={handleTypeChange(index)}
+                              value={item.typeId}
+                              fullWidth
+                            >
+                              { QuestionTypes() }
+                            </Select>
+                          </Grid>
+                        </Grid>
                       </CardContent>
                       <div className={classes.answer}>
                         { <AnswerControl typeId={item.typeId} /> }
                       </div>
                       <Divider variant="middle"/>
                       <CardActions>
-                        <IconButton>
+                        <IconButton onClick={handleDeleteClick(index)}>
                           <Delete />
                         </IconButton>
                         <FormControlLabel
@@ -233,11 +285,19 @@ function SurveyCreate(props) {
                           label="Required"
                         />
                       </CardActions>
-                    </StyledCard>
-                  ))
+                    </StyledCard>))
                   }
+                  <Fab color="secondary" aria-label="add" className={classes.fab} onClick={handleAddClick}>
+                    <Add />
+                  </Fab>
+                </Box>
+                <Box display="flex" justifyContent="center" >
+                  <Button variant="contained" color="secondary">
+                    Submit
+                  </Button>
                 </Box>
             </div>
+            <Warning/>
         </div>
     );
 }

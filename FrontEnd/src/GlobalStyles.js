@@ -88,6 +88,30 @@ const styles = theme => ({
       [theme.breakpoints.down("xs")]: {
         paddingTop: `${theme.spacing(14)}px !important`
       }
+    },
+    ".md-p-top": {
+      paddingTop: `${theme.spacing(15)}px !important`,
+      [theme.breakpoints.down("md")]: {
+        paddingTop: `${theme.spacing(12)}px !important`
+      },
+      [theme.breakpoints.down("sm")]: {
+        paddingTop: `${theme.spacing(10)}px !important`
+      },
+      [theme.breakpoints.down("xs")]: {
+        paddingTop: `${theme.spacing(8)}px !important`
+      }
+    },
+    ".sm-p-top": {
+      paddingTop: `${theme.spacing(8)}px !important`,
+      [theme.breakpoints.down("md")]: {
+        paddingTop: `${theme.spacing(6)}px !important`
+      },
+      [theme.breakpoints.down("sm")]: {
+        paddingTop: `${theme.spacing(4)}px !important`
+      },
+      [theme.breakpoints.down("xs")]: {
+        paddingTop: `${theme.spacing(2)}px !important`
+      }
     }
   }
 });
