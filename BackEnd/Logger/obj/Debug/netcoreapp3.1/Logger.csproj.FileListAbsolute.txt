@@ -1,0 +1,14 @@
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Logger.deps.json
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Logger.dll
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Logger.pdb
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Contracts.dll
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Entities.dll
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Contracts.pdb
+D:\Mano\Survey\survey\BackEnd\Logger\bin\Debug\netcoreapp3.1\Entities.pdb
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.csprojAssemblyReference.cache
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.AssemblyInfoInputs.cache
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.AssemblyInfo.cs
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.csproj.CoreCompileInputs.cache
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.csproj.CopyComplete
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.dll
+D:\Mano\Survey\survey\BackEnd\Logger\obj\Debug\netcoreapp3.1\Logger.pdb

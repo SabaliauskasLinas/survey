@@ -1,0 +1,14 @@
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Repository.deps.json
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Repository.dll
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Repository.pdb
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Contracts.dll
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Entities.dll
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Contracts.pdb
+D:\Mano\Survey\survey\BackEnd\Repository\bin\Debug\netcoreapp3.1\Entities.pdb
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.csprojAssemblyReference.cache
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.AssemblyInfoInputs.cache
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.AssemblyInfo.cs
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.csproj.CoreCompileInputs.cache
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.csproj.CopyComplete
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.dll
+D:\Mano\Survey\survey\BackEnd\Repository\obj\Debug\netcoreapp3.1\Repository.pdb
