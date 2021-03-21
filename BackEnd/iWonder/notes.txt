@@ -1,0 +1,7 @@
+﻿
+What is bad:
+
+• Logic in controllers
+• Front needs DTOs. maybe
+• Find out what is cors. atm: mode: 'no-cors'
+• Front error handling

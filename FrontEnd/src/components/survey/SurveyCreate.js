@@ -3,6 +3,8 @@ import { CheckBox, Delete, LinearScale, RadioButtonChecked, ShortText, Subject, 
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
+import { withSnackbar } from '../../helpers/notificationHelper';
+import { postData } from '../../helpers/requestHelper';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
 import StyledCard from '../../helpers/StyledCard';
 
@@ -103,8 +105,8 @@ function QuestionTypes() {
 }
 
 function AnswerControl(props) {
-  const { typeId } = props;
-  switch(typeId) {
+  const { questionTypeId } = props;
+  switch(questionTypeId) {
     case 1: {
       return (
         <TextField 
@@ -138,20 +140,47 @@ function AnswerControl(props) {
 }
 
 function SurveyCreate(props) {
-    const { classes } = props;
+    const { classes, snackbarShowMessage } = props;
     const initialTitle = 'Untitled survey';
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState('');
-    const [questions, setQuestions] = useState([{ typeId: 1, required: false, key: Math.random() }]);
+    const [questions, setQuestions] = useState([{ questionTypeId: 1, required: false, key: Math.random() }]);
     const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
 
+    //#region handlers
     const handleAddClick = () => { 
-      setQuestions(oldQuestions => [...oldQuestions, { typeId: 1, required: false, key: Math.random() }])
+      setQuestions(oldQuestions => [...oldQuestions, { questionTypeId: 1, required: false, key: Math.random() }])
     };
 
     const handleDeleteClick = index => e => {
       questions.splice(index, 1);
       setQuestions([...questions]);
+      snackbarShowMessage('Question deleted');
+    };
+
+    const handleCreateClick = e => {
+      let survey = {
+        name: title,
+        description: description,
+        userId: 1,
+        oneSubmission: false,
+        questions: questions,
+      };
+
+      // TODO: postData('Survey', {...})
+      postData('https://localhost:44303/api/Survey', survey)
+        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          if(res.ok)
+            snackbarShowMessage('Survey created');
+          else
+            snackbarShowMessage('Something went wrong','error');
+        })
+        .catch(er => {
+          console.log(er)
+          snackbarShowMessage('Something went wrong','error');
+        });
     };
 
     const handleTitleChange = (e) => {
@@ -169,13 +198,13 @@ function SurveyCreate(props) {
 
     const handleQuestionChange = index => e => {
       let newQuestions = [...questions];
-      newQuestions[index].question = e.target.value;
+      newQuestions[index].name = e.target.value;
       setQuestions(newQuestions);
     };
 
     const handleTypeChange = index => e => {
       let newQuestions = [...questions];
-      newQuestions[index].typeId = e.target.value;
+      newQuestions[index].questionTypeId = e.target.value;
       setQuestions(newQuestions);
     };
     
@@ -184,6 +213,7 @@ function SurveyCreate(props) {
       newQuestions[index].required = e.target.checked;
       setQuestions(newQuestions);
     };
+    //#endregion
 
     const Warning = () => (
       <React.Fragment>
@@ -258,7 +288,7 @@ function SurveyCreate(props) {
                               variant="outlined" 
                               color='secondary' 
                               onChange={handleTypeChange(index)}
-                              value={item.typeId}
+                              value={item.questionTypeId}
                               fullWidth
                             >
                               { QuestionTypes() }
@@ -267,7 +297,7 @@ function SurveyCreate(props) {
                         </Grid>
                       </CardContent>
                       <div className={classes.answer}>
-                        { <AnswerControl typeId={item.typeId} /> }
+                        { <AnswerControl questionTypeId={item.questionTypeId} /> }
                       </div>
                       <Divider variant="middle"/>
                       <CardActions>
@@ -292,8 +322,8 @@ function SurveyCreate(props) {
                   </Fab>
                 </Box>
                 <Box display="flex" justifyContent="center" >
-                  <Button variant="contained" color="secondary">
-                    Submit
+                  <Button variant="contained" color="secondary" onClick={handleCreateClick}>
+                    Create
                   </Button>
                 </Box>
             </div>
@@ -303,5 +333,5 @@ function SurveyCreate(props) {
 }
 
 export default withWidth()(
-    withStyles(styles, { withTheme: true })(SurveyCreate)
+    withStyles(styles, { withTheme: true })(withSnackbar(SurveyCreate))
   );

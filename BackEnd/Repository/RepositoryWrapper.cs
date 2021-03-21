@@ -11,6 +11,7 @@ namespace Repository
         private RepositoryContext _repoContext;
         private IOwnerRepository _owner;
         private IAccountRepository _account;
+        private ISurveyRepository _survey;
 
         public IOwnerRepository Owner
         {
@@ -23,6 +24,7 @@ namespace Repository
                 return _owner;
             }
         }
+
         public IAccountRepository Account
         {
             get
@@ -34,6 +36,19 @@ namespace Repository
                 return _account;
             }
         }
+
+        public ISurveyRepository Survey
+        {
+            get
+            {
+                if (_survey == null)
+                {
+                    _survey = new SurveyRepository(_repoContext);
+                }
+                return _survey;
+            }
+        }
+
         public RepositoryWrapper(RepositoryContext repositoryContext)
         {
             _repoContext = repositoryContext;

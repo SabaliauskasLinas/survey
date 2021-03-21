@@ -103,7 +103,7 @@ function NavBar(props) {
             </Link>
             <Button
               component={Link}
-              to='/survey'
+              to='/survey/create'
               variant="outlined"
               color="primary"
               className={classes.createSurveyButton}

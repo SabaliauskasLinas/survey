@@ -145,7 +145,7 @@ function Home(props) {
                           className={classes.extraLargeButton}
                           classes={{ label: classes.extraLargeButtonLabel }}
                           component={Link}
-                          to={'/survey'}
+                          to={'/survey/create'}
                         >
                           Create Survey
                         </Button>

@@ -25,19 +25,19 @@ function Main(props) {
 
   const selectHome = useCallback(() => {
     smoothScrollTop();
-    document.title = "Survey";
+    document.title = "iWonder";
     setSelectedTab("Home");
   }, [setSelectedTab]);
 
   const selectSurveys = useCallback(() => {
     smoothScrollTop();
-    document.title = "Surveys";
+    document.title = "iWonder - Surveys";
     setSelectedTab("Surveys");
   }, [setSelectedTab]);
 
   const handleSurveyCreateOpen = useCallback(() => {
     smoothScrollTop();
-    document.title = "Survey Create";
+    document.title = "iWonder - Create survey";
     setSelectedTab("SurveyCreate");
   }, [setSelectedTab]);
 

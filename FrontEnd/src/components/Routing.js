@@ -33,7 +33,7 @@ function Routing(props) {
       />
       <PropsRoute
         exact
-        path="/survey"
+        path="/survey/create"
         component={SurveyCreate}
         selectSurveys={selectSurveys}
         blogPosts={blogPosts}
