@@ -24,14 +24,4 @@ yarn-error.log*
 
 bin
 obj
-/BackEnd/Contracts/bin
-/BackEnd/Contracts/obj
-/BackEnd/Entities/bin
-/BackEnd/Entities/obj
-/BackEnd/iWonder/.vs
-/BackEnd/iWonder/obj
-/BackEnd/iWonder/bin
-/BackEnd/Logger/obj
-/BackEnd/Logger/bin
-/BackEnd/Repository/obj
-/BackEnd/Repository/bin
+.vs
