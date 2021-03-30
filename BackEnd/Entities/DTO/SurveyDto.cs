@@ -16,6 +16,10 @@ namespace Entities.DTO
 
         public bool OneSubmission { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
+        public int TotalAnswers { get; set; }
+
         public int UserId { get; set; }
 
         public ICollection<QuestionDto> Questions { get; set; }

@@ -1,49 +1,77 @@
-import React from 'react'
-import { Badge, Box, Card, CardHeader, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography, withStyles } from "@material-ui/core";
-import { Check, CheckCircle, Drafts, Inbox, Mail } from "@material-ui/icons";
-
-function ListItemLink(props) {
-	return <ListItem button component="a" {...props} />;
-}
+import React, { useEffect, useState } from 'react'
+import { Badge, Card, CardHeader, Divider, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
+import { CheckCircle } from "@material-ui/icons";
+import { getData } from '../../helpers/requestHelper';
 
 function SurveysList(props) {
-	const { title } = props;
+	const { title, type } = props;
+	const [surveys, setSurveys] = useState([]);
+	useEffect(() => {
+		let endpoint = '';
+		switch (type) {
+			case 'popular':
+				endpoint = 'GetMostPopularSurveys';
+				break;
+			case 'recent':
+				endpoint = 'GetMostRecentSurveys';
+				break;
+			default:
+				console.log('Survey type not handled');
+		}
+
+		if (endpoint) {
+			getData(`https://localhost:44303/api/Survey/${endpoint}`)
+				.then(res => res.json())
+				.then(res => {
+					setSurveys(res);
+				})
+				.catch(er => {
+					console.log(er)
+				});
+		}
+	});
+
 	return (
 		<Card>
 			<CardHeader
 				title={title}
 			/>
 			<List component="nav" aria-label="main mailbox folders">
-				{[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+				{ (!surveys || surveys.length === 0) &&
+					<Typography variant="h5" align={'center'}>
+						Could not load data
+					</Typography>
+				}
+				{surveys && surveys.map((item, index) => (
 					<div>
 						<Divider variant="middle" />
-						<ListItem 
-							button 
+						<ListItem
+							button
 							key={`survey-${index}`}>
 							<ListItemIcon>
 								<Tooltip title="Total answers">
-									<Badge badgeContent={4} color="secondary" showZero max={999}>
+									<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>
 										<CheckCircle />
 									</Badge>
 								</Tooltip>
 							</ListItemIcon>
-							<ListItemText 
+							<ListItemText
 								primaryTypographyProps={{ noWrap: true, variant: 'h6' }}
-								primary="Didžiausių Europos oro linijų bendrovių, vykdančių veiklą Lietuvos oro uostuose, taikomų vartotojų lojalumo programų naudos tyrimas (vartotojų požiūriu)"
+								primary={item.name}
 								secondary={
 									<React.Fragment>
-									  <Typography
-										component="span"
-										variant="body2"
-										color="textSecondary"
-										noWrap
-										display="block"
-									  >
-										Kiekvienas turi būti vertinamas pagal savo gebėjimus ir gauti atlygį, priklausantį nuo darbo rezultatų!Moterų informacijos centras organizuoją dešimtąjį „Lyg
-									  </Typography>
-									  	2021-03-29 20:50
+										<Typography
+											component="span"
+											variant="body2"
+											color="textSecondary"
+											noWrap
+											display="block"
+										>
+											{item.description}
+										</Typography>
+										{new Date(item.createdAt).toLocaleString()}
 									</React.Fragment>
-								}/>
+								} />
 						</ListItem>
 					</div>
 				))

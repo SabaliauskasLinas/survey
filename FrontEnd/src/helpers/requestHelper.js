@@ -19,7 +19,6 @@ export async function getDataPromise(url, params = {}, additionalHeaders = []){
         additionalHeaders.forEach(addH => headers[addH.key] = addH.value);
 
     const response = await fetch(path, {
-        credentials: 'include',
         method: 'GET',
         headers: headers,
     });

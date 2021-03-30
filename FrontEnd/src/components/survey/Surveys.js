@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Grid, withStyles } from "@material-ui/core";
@@ -29,10 +29,10 @@ function Surveys(props) {
 			<div className={classNames("container-fluid", classes.container)}>
 				<Grid container spacing={5}>
 					<Grid item xs={12} md={6}>
-						<SurveysList title={'Most popular'}/>
+						<SurveysList title={'Most popular'} type={'popular'}/>
           			</Grid>
 					<Grid item xs={12} md={6}>
-						<SurveysList title={'Most recent'}/>
+						<SurveysList title={'Most recent'}  type={'recent'}/>
           			</Grid>
 				</Grid>
 			</div>

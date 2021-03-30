@@ -32,7 +32,7 @@ namespace iWonder.Controllers
             var survey = _repository.Survey.GetSurveyWithDetails(id);
             if (survey == null)
             {
-                _logger.LogError($"Survey with id: {id}, hasn't been found in db.");
+                _logger.LogError($"Survey with id: {id}, hasn't been found.");
                 return NotFound();
             }
             else
@@ -41,6 +41,24 @@ namespace iWonder.Controllers
                 var surveyResult = _mapper.Map<SurveyDto>(survey);
                 return Ok(surveyResult);
             }
+        }
+
+        [HttpGet("GetMostPopularSurveys")]
+        public IActionResult GetMostPopularSurveys()
+        {
+            var surveys = _repository.Survey.GetMostPopularSurveys();
+            _logger.LogInfo("Returned all most popular surveys.");
+            var surveysResult = _mapper.Map<IEnumerable<SurveyDto>>(surveys);
+            return Ok(surveysResult);
+        }
+
+        [HttpGet("GetMostRecentSurveys")]
+        public IActionResult GetMostRecentSurveys()
+        {
+            var surveys = _repository.Survey.GetMostRecentSurveys();
+            _logger.LogInfo("Returned all most recent surveys.");
+            var surveysResult = _mapper.Map<IEnumerable<SurveyDto>>(surveys);
+            return Ok(surveysResult);
         }
 
         [HttpPost]

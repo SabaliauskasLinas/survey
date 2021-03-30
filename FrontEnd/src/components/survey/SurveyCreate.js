@@ -172,7 +172,7 @@ function SurveyCreate(props) {
         .then(res => res.json())
         .then(res => {
           console.log(res);
-          if(res.ok)
+          if(res && res.id)
             snackbarShowMessage('Survey created');
           else
             snackbarShowMessage('Something went wrong','error');

@@ -15,10 +15,19 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Survey> GetAllSurveys()
+        public IEnumerable<Survey> GetMostPopularSurveys()
         {
             return FindAll()
-                .OrderBy(o => o.Name)
+                .Take(10)
+                .OrderByDescending(o => o.TotalAnswers)
+                .ToList();
+        }
+
+        public IEnumerable<Survey> GetMostRecentSurveys()
+        {
+            return FindAll()
+                .Take(10)
+                .OrderByDescending(o => o.CreatedAt)
                 .ToList();
         }
 

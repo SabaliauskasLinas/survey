@@ -7,7 +7,8 @@ namespace Contracts
 {
     public interface ISurveyRepository
     {
-        IEnumerable<Survey> GetAllSurveys();
+        IEnumerable<Survey> GetMostPopularSurveys();
+        IEnumerable<Survey> GetMostRecentSurveys();
         Survey GetSurveyById(int surveyId);
         Survey GetSurveyWithDetails(int surveyId);
         void CreateSurvey(Survey survey);
