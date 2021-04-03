@@ -16,6 +16,10 @@ namespace iWonder
             CreateMap<QuestionCreationDto, Question>();
             CreateMap<Survey, SurveyDto>();
             CreateMap<Question, QuestionDto>();
+            CreateMap<AnswerCreationDto, Answer>();
+            CreateMap<SubmissionCreationDto, Submission>();
+            CreateMap<Submission, SubmissionDto>();
+            CreateMap<Answer, AnswerDto>();
         }
     }
 }

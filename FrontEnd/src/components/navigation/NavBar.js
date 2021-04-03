@@ -49,7 +49,6 @@ function NavBar(props) {
     classes,
     openRegisterDialog,
     openLoginDialog,
-    handleSurveyCreateOpen,
     handleMobileDrawerOpen,
     handleMobileDrawerClose,
     mobileDrawerOpen,
@@ -109,7 +108,6 @@ function NavBar(props) {
               className={classes.createSurveyButton}
               startIcon={<AddIcon />}
               size="large"
-              onClick={handleSurveyCreateOpen}
             >
               Create
             </Button>

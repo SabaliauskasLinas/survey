@@ -5,38 +5,28 @@ import Home from "./home/Home";
 import Surveys from "./survey/Surveys";
 import PropsRoute from "./navigation/PropsRoute";
 import SurveyCreate from "./survey/SurveyCreate";
+import SurveyAnswer from "./survey/SurveyAnswer";
 
 function Routing(props) {
-  const { blogPosts, selectSurveys, selectHome } = props;
+  const { selectSurveys, selectSurveyCreate, selectSurveyAnswer, selectHome } = props;
   return (
     <Switch>
-      {blogPosts.map((post) => (
-        <PropsRoute
-          path={post.url}
-          component={Surveys}
-          title={post.title}
-          key={post.title}
-          src={post.src}
-          date={post.date}
-          content={post.content}
-          otherArticles={blogPosts.filter(
-            (blogPost) => blogPost.id !== post.id
-          )}
-        />
-      ))}
       <PropsRoute
         exact
         path="/surveys"
         component={Surveys}
         selectSurveys={selectSurveys}
-        blogPosts={blogPosts}
       />
       <PropsRoute
         exact
         path="/survey/create"
         component={SurveyCreate}
-        selectSurveys={selectSurveys}
-        blogPosts={blogPosts}
+        selectSurveyCreate={selectSurveyCreate}
+      />
+      <PropsRoute
+        path="/survey/answer/:id"
+        component={SurveyAnswer}
+        selectSurveyAnswer={selectSurveyAnswer}
       />
       <PropsRoute path="/" component={Home} selectHome={selectHome} />
     </Switch>
@@ -44,9 +34,10 @@ function Routing(props) {
 }
 
 Routing.propTypes = {
-  blogPosts: PropTypes.arrayOf(PropTypes.object),
   selectHome: PropTypes.func.isRequired,
   selectSurveys: PropTypes.func.isRequired,
+  selectSurveyCreate: PropTypes.func.isRequired,
+  selectSurveyAnswer: PropTypes.func.isRequired,
 };
 
 export default memo(Routing);

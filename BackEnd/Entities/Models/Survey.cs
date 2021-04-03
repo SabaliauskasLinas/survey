@@ -10,7 +10,7 @@ namespace Entities.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        [StringLength(60, ErrorMessage = "Name can't be longer than 60 characters")]
+        [StringLength(1000, ErrorMessage = "Name can't be longer than 1000 characters")]
         public string Name { get; set; }
 
         public string Description { get; set; }

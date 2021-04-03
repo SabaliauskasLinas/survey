@@ -8,7 +8,7 @@ namespace Entities.DTO
     public class QuestionCreationDto
     {
         [Required(ErrorMessage = "Question name is required")]
-        [StringLength(100, ErrorMessage = "Question name can't be longer than 100 characters")]
+        [StringLength(1000, ErrorMessage = "Question name can't be longer than 1000 characters")]
         public string Name { get; set; }
         public bool Required { get; set; }
         public int SurveyId { get; set; }

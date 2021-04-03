@@ -18,6 +18,8 @@ namespace Entities
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +27,8 @@ namespace Entities
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionTypesConfiguration());
             modelBuilder.ApplyConfiguration(new SurveysConfiguration());
+            modelBuilder.ApplyConfiguration(new SubmissionsConfiguration());
+            modelBuilder.ApplyConfiguration(new AnswersConfiguration());
         }
     }
 }

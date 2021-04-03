@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
 import NavBar from "./navigation/NavBar";
 //import "aos/dist/aos.css";
-import dummyBlogPosts from "../dummy_data/blogPosts";
 import Routing from "./Routing";
 import smoothScrollTop from "../helpers/smoothScrollTop";
 
@@ -21,7 +20,6 @@ function Main(props) {
   const { classes } = props;
   const [selectedTab, setSelectedTab] = useState(null);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  const [blogPosts, setBlogPosts] = useState([]);
 
   const selectHome = useCallback(() => {
     smoothScrollTop();
@@ -35,11 +33,15 @@ function Main(props) {
     setSelectedTab("Surveys");
   }, [setSelectedTab]);
 
-  const handleSurveyCreateOpen = useCallback(() => {
+  const selectSurveyCreate = () => {
     smoothScrollTop();
-    document.title = "iWonder - Create survey";
-    setSelectedTab("SurveyCreate");
-  }, [setSelectedTab]);
+    document.title = "iWonder - Survey Create";
+  };
+
+  const selectSurveyAnswer = () => {
+    smoothScrollTop();
+    document.title = "iWonder - Survey Answer";
+  };
 
   const handleMobileDrawerOpen = useCallback(() => {
     setIsMobileDrawerOpen(true);
@@ -49,39 +51,20 @@ function Main(props) {
     setIsMobileDrawerOpen(false);
   }, [setIsMobileDrawerOpen]);
 
-  const fetchBlogPosts = useCallback(() => {
-    const blogPosts = dummyBlogPosts.map((blogPost) => {
-      let title = blogPost.title;
-      title = title.toLowerCase();
-      /* Remove unwanted characters, only accept alphanumeric and space */
-      title = title.replace(/[^A-Za-z0-9 ]/g, "");
-      /* Replace multi spaces with a single space */
-      title = title.replace(/\s{2,}/g, " ");
-      /* Replace space with a '-' symbol */
-      title = title.replace(/\s/g, "-");
-      blogPost.url = `/blog/post/${title}`;
-      blogPost.params = `?id=${blogPost.id}`;
-      return blogPost;
-    });
-    setBlogPosts(blogPosts);
-  }, [setBlogPosts]);
-
-  useEffect(fetchBlogPosts, [fetchBlogPosts]);
-
   return (
     <div className={classes.wrapper}>
       <NavBar
         selectedTab={selectedTab}
         selectTab={setSelectedTab}
         mobileDrawerOpen={isMobileDrawerOpen}
-        handleSurveyCreateOpen={handleSurveyCreateOpen}
         handleMobileDrawerOpen={handleMobileDrawerOpen}
         handleMobileDrawerClose={handleMobileDrawerClose}
       />
       <Routing
-        blogPosts={blogPosts}
         selectHome={selectHome}
         selectSurveys={selectSurveys}
+        selectSurveyCreate={selectSurveyCreate}
+        selectSurveyAnswer={selectSurveyAnswer}
       />
     </div>
   );

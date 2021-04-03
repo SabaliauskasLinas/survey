@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Entities.Models
 {
-    public class Question
+    public class Submission
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public bool Required { get; set; }
+
         public Survey Survey { get; set; }
+
         public int SurveyId { get; set; }
-        public QuestionType QuestionType { get; set; }
-        public int QuestionTypeId { get; set; }
+
+        public User User { get; set; }
+
+        public int? UserId { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
         public IEnumerable<Answer> Answers { get; set; }
     }
 }

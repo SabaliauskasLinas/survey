@@ -140,12 +140,15 @@ function AnswerControl(props) {
 }
 
 function SurveyCreate(props) {
-    const { classes, snackbarShowMessage } = props;
+    const { classes, snackbarShowMessage, selectSurveyCreate } = props;
     const initialTitle = 'Untitled survey';
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState('');
     const [questions, setQuestions] = useState([{ questionTypeId: 1, required: false, key: Math.random() }]);
     const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
+    useEffect(() => {
+      selectSurveyCreate();
+    }, [selectSurveyCreate]);
 
     //#region handlers
     const handleAddClick = () => { 
@@ -297,7 +300,7 @@ function SurveyCreate(props) {
                         </Grid>
                       </CardContent>
                       <div className={classes.answer}>
-                        { <AnswerControl questionTypeId={item.questionTypeId} /> }
+                        <AnswerControl questionTypeId={item.questionTypeId} />
                       </div>
                       <Divider variant="middle"/>
                       <CardActions>

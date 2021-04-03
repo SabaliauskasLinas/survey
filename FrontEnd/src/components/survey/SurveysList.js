@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Badge, Card, CardHeader, Divider, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
 import { CheckCircle } from "@material-ui/icons";
 import { getData } from '../../helpers/requestHelper';
+import { Link } from 'react-router-dom';
 
 function SurveysList(props) {
 	const { title, type } = props;
@@ -29,7 +30,7 @@ function SurveysList(props) {
 					console.log(er)
 				});
 		}
-	});
+	}, [type]);
 
 	return (
 		<Card>
@@ -43,11 +44,9 @@ function SurveysList(props) {
 					</Typography>
 				}
 				{surveys && surveys.map((item, index) => (
-					<div>
+					<div key={`survey-${index}`}>
 						<Divider variant="middle" />
-						<ListItem
-							button
-							key={`survey-${index}`}>
+						<ListItem button component={Link} to={`/survey/answer/${item.id}`}>
 							<ListItemIcon>
 								<Tooltip title="Total answers">
 									<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>

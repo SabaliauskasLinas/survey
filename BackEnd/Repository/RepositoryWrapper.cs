@@ -12,6 +12,7 @@ namespace Repository
         private IOwnerRepository _owner;
         private IAccountRepository _account;
         private ISurveyRepository _survey;
+        private ISubmissionRepository _submission;
 
         public IOwnerRepository Owner
         {
@@ -46,6 +47,18 @@ namespace Repository
                     _survey = new SurveyRepository(_repoContext);
                 }
                 return _survey;
+            }
+        }
+
+        public ISubmissionRepository Submission
+        {
+            get
+            {
+                if (_submission == null)
+                {
+                    _submission = new SubmissionRepository(_repoContext);
+                }
+                return _submission;
             }
         }
 
