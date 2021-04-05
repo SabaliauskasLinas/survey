@@ -53,6 +53,11 @@ namespace iWonder.Controllers
             }
             var submissionEntity = _mapper.Map<Submission>(submission);
             _repository.Submission.CreateSubmission(submissionEntity);
+
+            var survey = _repository.Survey.GetSurveyById(submission.SurveyId);
+            survey.TotalAnswers++;
+            _repository.Survey.UpdateSurvey(survey);
+
             _repository.Save();
 
             var createdSubmission = _mapper.Map<SubmissionDto>(submissionEntity);

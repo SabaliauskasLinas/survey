@@ -4,7 +4,7 @@ import { Avatar, Box, Button, CardContent, CardHeader, Grid, TextField, Typograp
 import { withSnackbar } from '../../helpers/notificationHelper';
 import classNames from 'classnames';
 import StyledCard from '../../helpers/StyledCard';
-import { useHistory, useParams } from 'react-router-dom'
+import { Prompt, useHistory, useParams } from 'react-router-dom'
 import { getData, postData } from '../../helpers/requestHelper';
 import { spacing } from '@material-ui/system';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
@@ -42,7 +42,7 @@ const AnswerControl = props => {
                 color='secondary'
                 style={{ width: '40%' }}
                 onChange={handleAnswerChange}
-                //value={answer}
+            //value={answer}
             />
         )
     }
@@ -57,7 +57,7 @@ const AnswerControl = props => {
                 placeholder='Long answer text'
                 color='secondary'
                 onChange={handleAnswerChange}
-                //value={answer}
+            //value={answer}
             />
         )
     }
@@ -82,6 +82,7 @@ const SurveyAnswer = props => {
     const [survey, setSurvey] = useState({});
     const [questions, setQuestions] = useState([]);
     const [errors, setErrors] = useState([]);
+    const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
 
     useEffect(() => {
         selectSurveyAnswer();
@@ -100,7 +101,7 @@ const SurveyAnswer = props => {
         let newErrors = [];
         questions.forEach(q => {
             if (q.required && isEmptyOrSpaces(q.answer))
-                newErrors.push({questionId: q.id, message: 'Answer is required'});
+                newErrors.push({ questionId: q.id, message: 'Answer is required' });
         });
 
         setErrors(newErrors);
@@ -109,30 +110,46 @@ const SurveyAnswer = props => {
 
     const handleSubmitClick = e => {
         var newErrors = validateSurvey();
-        if (newErrors.length > 0){
-            snackbarShowMessage('Please fix validation errors','error');
+        if (newErrors.length > 0) {
+            snackbarShowMessage('Please fix validation errors', 'error');
             return;
         }
 
         let submission = {
             surveyId: survey.id,
-            answers: questions.map(q => { return {questionId: q.id, text: q.answer }})
+            answers: questions.map(q => { return { questionId: q.id, text: q.answer } })
         }
 
         postData('https://localhost:44303/api/Submission', submission)
-          .then(res => res.json())
-          .then(res => {
-            if(res && res.id)
-              snackbarShowMessage('Submission successful');
-            else
-              snackbarShowMessage('Something went wrong','error');
-          })
-          .catch(er => {
-            console.log(er)
-            snackbarShowMessage('Something went wrong','error');
-          });
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.id) {
+                    snackbarShowMessage('Submission successful');
+                    window.location.href = '/surveys';
+                }
+                else
+                    snackbarShowMessage('Something went wrong', 'error');
+            })
+            .catch(er => {
+                console.log(er)
+                snackbarShowMessage('Something went wrong', 'error');
+            });
     };
-    
+
+    const Warning = () => (
+        <React.Fragment>
+            <Prompt
+                when={shouldBlockNavigation}
+                message='You have unsaved changes, are you sure you want to leave?'
+            />
+        </React.Fragment>
+    );
+
+    useEffect(() => {
+        if (shouldBlockNavigation)
+            window.onbeforeunload = () => true
+    })
+
     return (
         <div className={"sm-p-top"}>
             <div className={classNames("container-fluid", classes.container)}>
@@ -178,6 +195,7 @@ const SurveyAnswer = props => {
                     </Button>
                 </Box>
             </div>
+            <Warning />
         </div>
     );
 };
