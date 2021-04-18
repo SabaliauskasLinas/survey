@@ -10,5 +10,6 @@ namespace Entities.DTO
         public string Name { get; set; }
         public bool Required { get; set; }
         public int QuestionTypeId { get; set; }
+        public ICollection<QuestionOptionDto> Options { get; set; }
     }
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Avatar, Box, Button, CardContent, CardHeader, Grid, TextField, Typography, withStyles } from '@material-ui/core';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import classNames from 'classnames';
-import StyledCard from '../../helpers/StyledCard';
+import StyledCard from './customized/StyledCard';
 import { Prompt, useHistory, useParams } from 'react-router-dom'
 import { getData, postData } from '../../helpers/requestHelper';
 import { spacing } from '@material-ui/system';
@@ -117,7 +117,7 @@ const SurveyAnswer = props => {
 
         let submission = {
             surveyId: survey.id,
-            answers: questions.map(q => { return { questionId: q.id, text: q.answer } })
+            answers: questions.map(q => { return { questionId: q.id, content: q.answer } })
         }
 
         postData('https://localhost:44303/api/Submission', submission)

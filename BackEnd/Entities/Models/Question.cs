@@ -14,5 +14,6 @@ namespace Entities.Models
         public QuestionType QuestionType { get; set; }
         public int QuestionTypeId { get; set; }
         public IEnumerable<Answer> Answers { get; set; }
+        public IEnumerable<QuestionOption> Options { get; set; }
     }
 }

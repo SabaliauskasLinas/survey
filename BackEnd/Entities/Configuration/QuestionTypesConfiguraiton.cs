@@ -22,6 +22,21 @@ namespace Entities.Configuration
                 {
                     Id = 2,
                     Name = "Paragraph",
+                },
+                new QuestionType
+                {
+                    Id = 3,
+                    Name = "Multiple choice",
+                },
+                new QuestionType
+                {
+                    Id = 4,
+                    Name = "Checkboxes",
+                },
+                new QuestionType
+                {
+                    Id = 5,
+                    Name = "Linear scale",
                 }
             );
         }

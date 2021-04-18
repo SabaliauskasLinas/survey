@@ -4,12 +4,9 @@ using System.Text;
 
 namespace Entities.DTO
 {
-    public class AnswerDto
+    public class QuestionOptionDto
     {
         public int Id { get; set; }
-
-        public string Content { get; set; }
-
-        public int QuestionId { get; set; }
+        public string Name { get; set; }
     }
 }

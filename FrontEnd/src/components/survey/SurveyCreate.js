@@ -1,4 +1,4 @@
-import { Box, Dialog, Tooltip, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Fab, Grid, Button, Modal, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { Box, Dialog, Tooltip, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Fab, Grid, Button, Modal, DialogTitle, DialogContent, DialogContentText, DialogActions, RadioGroup, Radio } from '@material-ui/core';
 import { CheckBox, Delete, LinearScale, RadioButtonChecked, ShortText, Subject, Add } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -6,7 +6,8 @@ import { Prompt } from 'react-router';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import { postData } from '../../helpers/requestHelper';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
-import StyledCard from '../../helpers/StyledCard';
+import MultipleChoice from './customized/MultipleChoice';
+import StyledCard from './customized/StyledCard';
 
 const styles = (theme) => ({
 	container: {
@@ -62,31 +63,26 @@ const questionTypes = [
 		id: 1,
 		text: "Short answer",
 		icon: <ShortText />,
-		disabled: false
 	},
 	{
 		id: 2,
 		text: "Paragraph",
 		icon: <Subject />,
-		disabled: false,
 	},
 	{
 		id: 3,
 		text: "Multiple choice",
 		icon: <RadioButtonChecked />,
-		disabled: true,
 	},
 	{
 		id: 4,
 		text: "Checkboxes",
 		icon: <CheckBox />,
-		disabled: true,
 	},
 	{
 		id: 5,
 		text: "Linear scale",
 		icon: <LinearScale />,
-		disabled: true,
 	},
 ]
 
@@ -105,8 +101,9 @@ function QuestionTypes() {
 }
 
 function AnswerControl(props) {
-	const { questionTypeId } = props;
-	switch (questionTypeId) {
+	const { question, changeOptions } = props;
+
+	switch (question.questionTypeId) {
 		case 1: {
 			return (
 				<TextField
@@ -128,13 +125,22 @@ function AnswerControl(props) {
 				/>
 			)
 		}
+		case 3: {
+			return (
+				<MultipleChoice
+					setQuestionOptions={options => changeOptions(options)}
+				/>
+			)
+		}
 		default: {
-			<TextField
-				placeholder='Short answer text'
-				color='secondary'
-				disabled
-				style={{ width: '40%' }}
-			/>
+			return (
+				<TextField
+					placeholder='Short answer text'
+					color='secondary'
+					disabled
+					style={{ width: '40%' }}
+				/>
+			)
 		}
 	}
 }
@@ -166,6 +172,9 @@ function SurveyCreate(props) {
 		questions.forEach(q => {
 			if (isEmptyOrSpaces(q.name))
 				newErrors.push({ questionKey: q.key, message: 'Question is required' });
+
+			if (q.hasError)
+				newErrors.push({});
 		});
 
 		if (newErrors.length > 0) {
@@ -259,6 +268,13 @@ function SurveyCreate(props) {
 	const handleQuestionChange = index => e => {
 		let newQuestions = [...questions];
 		newQuestions[index].name = e.target.value;
+		setQuestions(newQuestions);
+	};
+
+	const handleQuestionOptionsChange = (options, index) => {
+		let newQuestions = [...questions];
+		newQuestions[index].options = options;
+		newQuestions[index].hasError = options.find(o => o.error) != null;
 		setQuestions(newQuestions);
 	};
 
@@ -359,7 +375,7 @@ function SurveyCreate(props) {
 								</Grid>
 							</CardContent>
 							<div className={classes.answer}>
-								<AnswerControl questionTypeId={item.questionTypeId} />
+								<AnswerControl question={item} changeOptions={options => handleQuestionOptionsChange(options, index)} />
 							</div>
 							<Divider variant="middle" />
 							<CardActions>
@@ -379,14 +395,16 @@ function SurveyCreate(props) {
 							</CardActions>
 						</StyledCard>))
 					}
-					<Fab color="secondary" aria-label="add" className={classes.fab} onClick={handleAddClick}>
+				</Box>
+				<Box display="flex" justifyContent="center" mb={2}>
+					<Button variant="contained" color="secondary" onClick={handleAddClick}>
 						<Add />
-					</Fab>
+                  	</Button>
 				</Box>
 				<Box display="flex" justifyContent="center" >
-					<Button variant="contained" color="secondary" onClick={handleCreateClick}>
+					<Button variant="contained" color="primary" onClick={handleCreateClick}>
 						Create
-                  </Button>
+                  	</Button>
 				</Box>
 			</div>
 			<Warning />

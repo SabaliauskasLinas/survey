@@ -1,9 +1,6 @@
 ﻿using Entities.Configuration;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Entities
 {
@@ -20,6 +17,7 @@ namespace Entities
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public DbSet<QuestionOption> QuestionOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

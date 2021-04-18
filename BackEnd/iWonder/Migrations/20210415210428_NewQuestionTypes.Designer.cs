@@ -4,14 +4,16 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace iWonder.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20210415210428_NewQuestionTypes")]
+    partial class NewQuestionTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,28 +72,6 @@ namespace iWonder.Migrations
                     b.HasIndex("SurveyId");
 
                     b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("Entities.Models.QuestionOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("QuestionOptions");
                 });
 
             modelBuilder.Entity("Entities.Models.QuestionType", b =>
@@ -273,17 +253,6 @@ namespace iWonder.Migrations
                     b.Navigation("Survey");
                 });
 
-            modelBuilder.Entity("Entities.Models.QuestionOption", b =>
-                {
-                    b.HasOne("Entities.Models.Question", "Question")
-                        .WithMany("Options")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("Entities.Models.Submission", b =>
                 {
                     b.HasOne("Entities.Models.Survey", "Survey")
@@ -315,8 +284,6 @@ namespace iWonder.Migrations
             modelBuilder.Entity("Entities.Models.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("Entities.Models.QuestionType", b =>

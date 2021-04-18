@@ -10,16 +10,18 @@ namespace iWonder
         {
             CreateMap<Owner, OwnerDto>();
             CreateMap<Account, AccountDto>();
-            CreateMap<OwnerForCreationDto, Owner>();
             CreateMap<OwnerForUpdateDto, Owner>();
+            CreateMap<OwnerForCreationDto, Owner>();
             CreateMap<SurveyCreationDto, Survey>();
             CreateMap<QuestionCreationDto, Question>();
+            CreateMap<QuestionOptionCreationDto, QuestionOption>();
+            CreateMap<SubmissionCreationDto, Submission>();
+            CreateMap<AnswerCreationDto, Answer>();
             CreateMap<Survey, SurveyDto>();
             CreateMap<Question, QuestionDto>();
-            CreateMap<AnswerCreationDto, Answer>();
-            CreateMap<SubmissionCreationDto, Submission>();
             CreateMap<Submission, SubmissionDto>();
             CreateMap<Answer, AnswerDto>();
+            CreateMap<QuestionOption, QuestionOptionDto>();
         }
     }
 }
