@@ -1,11 +1,13 @@
-import { Box, Dialog, Tooltip, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Fab, Grid, Button, Modal, DialogTitle, DialogContent, DialogContentText, DialogActions, RadioGroup, Radio } from '@material-ui/core';
-import { CheckBox, Delete, LinearScale, RadioButtonChecked, ShortText, Subject, Add } from '@material-ui/icons';
+import { Box, Dialog, Tooltip, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { CheckBox, Delete, RadioButtonChecked, ShortText, Subject, Add, LinearScale } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import { postData } from '../../helpers/requestHelper';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
+import Checkboxes from './customized/Checkboxes';
+import LinearScaleSettings from './customized/LinearScaleSettings';
 import MultipleChoice from './customized/MultipleChoice';
 import StyledCard from './customized/StyledCard';
 
@@ -128,6 +130,20 @@ function AnswerControl(props) {
 		case 3: {
 			return (
 				<MultipleChoice
+					setQuestionOptions={options => changeOptions(options)}
+				/>
+			)
+		}
+		case 4: {
+			return (
+				<Checkboxes
+					setQuestionOptions={options => changeOptions(options)}
+				/>
+			)
+		}
+		case 5: {
+			return (
+				<LinearScaleSettings
 					setQuestionOptions={options => changeOptions(options)}
 				/>
 			)
