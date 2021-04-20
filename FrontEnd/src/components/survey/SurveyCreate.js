@@ -6,10 +6,11 @@ import { Prompt } from 'react-router';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import { postData } from '../../helpers/requestHelper';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
-import Checkboxes from './customized/Checkboxes';
+import CheckboxesSettings from './customized/CheckboxesSettings';
 import LinearScaleSettings from './customized/LinearScaleSettings';
-import MultipleChoice from './customized/MultipleChoice';
+import MultipleChoiceSettings from './customized/MultipleChoiceSettings';
 import StyledCard from './customized/StyledCard';
+import questionTypes from '../../enums/questionTypes';
 
 const styles = (theme) => ({
 	container: {
@@ -60,7 +61,7 @@ const styles = (theme) => ({
 	}
 });
 
-const questionTypes = [
+const questionTypesExtended = [
 	{
 		id: 1,
 		text: "Short answer",
@@ -91,7 +92,7 @@ const questionTypes = [
 
 function QuestionTypes() {
 	return (
-		questionTypes.map((item, index) => (
+		questionTypesExtended.map((item, index) => (
 			<MenuItem key={`menu-item-${index}`} value={item.id} disabled={item.disabled}>
 				<ListItemIcon>
 					{item.icon}
@@ -106,7 +107,7 @@ function AnswerControl(props) {
 	const { question, changeOptions } = props;
 
 	switch (question.questionTypeId) {
-		case 1: {
+		case questionTypes.SHORT_ANSWER: {
 			return (
 				<TextField
 					placeholder='Short answer text'
@@ -116,7 +117,7 @@ function AnswerControl(props) {
 				/>
 			)
 		}
-		case 2: {
+		case questionTypes.PARAGRAPH: {
 			return (
 				<TextField
 					multiline
@@ -127,21 +128,21 @@ function AnswerControl(props) {
 				/>
 			)
 		}
-		case 3: {
+		case questionTypes.MULTIPLE_CHOICE: {
 			return (
-				<MultipleChoice
+				<MultipleChoiceSettings
 					setQuestionOptions={options => changeOptions(options)}
 				/>
 			)
 		}
-		case 4: {
+		case questionTypes.CHECKBOXES: {
 			return (
-				<Checkboxes
+				<CheckboxesSettings
 					setQuestionOptions={options => changeOptions(options)}
 				/>
 			)
 		}
-		case 5: {
+		case questionTypes.LINEAR_SCALE: {
 			return (
 				<LinearScaleSettings
 					setQuestionOptions={options => changeOptions(options)}

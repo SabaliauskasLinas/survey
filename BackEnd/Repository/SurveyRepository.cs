@@ -41,6 +41,7 @@ namespace Repository
         {
             return FindByCondition(s => s.Id.Equals(surveyId))
                 .Include(q => q.Questions)
+                .ThenInclude(o => o.Options)
                 .FirstOrDefault();
         }
 

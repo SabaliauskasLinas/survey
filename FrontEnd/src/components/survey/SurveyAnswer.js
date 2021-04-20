@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Box, Button, CardContent, CardHeader, Grid, TextField, Typography, withStyles } from '@material-ui/core';
+import { Avatar, Box, Button, CardContent, CardHeader, TextField, Typography, withStyles } from '@material-ui/core';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import classNames from 'classnames';
 import StyledCard from './customized/StyledCard';
-import { Prompt, useHistory, useParams } from 'react-router-dom'
+import { Prompt, useParams } from 'react-router-dom'
 import { getData, postData } from '../../helpers/requestHelper';
-import { spacing } from '@material-ui/system';
 import { isEmptyOrSpaces } from '../../helpers/stringHelper';
+import questionTypes from '../../enums/questionTypes';
+import MultipleChoice from './customized/MultipleChoice';
+import Checkboxes from './customized/Checkboxes';
 
 const styles = (theme) => ({
     container: {
@@ -26,52 +28,61 @@ const styles = (theme) => ({
 });
 
 const AnswerControl = props => {
-    const { question, error } = props;
+    const { question, error, changeAnswers } = props;
 
-    const handleAnswerChange = e => {
-        question.answer = e.target.value;
+    const handleAnswerChange = answer => {
+        changeAnswers(answer);
     }
-
-    //#region Answer Control Types
-    const ShortAnswer = props => {
-        return (
-            <TextField
-                error={error != null}
-                helperText={error && error.message}
-                placeholder='Short answer text'
-                color='secondary'
-                style={{ width: '40%' }}
-                onChange={handleAnswerChange}
-            //value={answer}
-            />
-        )
-    }
-
-    const LongAnswer = props => {
-        return (
-            <TextField
-                error={error != null}
-                helperText={error && error.message}
-                multiline
-                fullWidth
-                placeholder='Long answer text'
-                color='secondary'
-                onChange={handleAnswerChange}
-            //value={answer}
-            />
-        )
-    }
-    //#endregion
 
     switch (question.questionTypeId) {
-        case 1: {
-            return <ShortAnswer />
+        case questionTypes.SHORT_ANSWER: {
+            return (
+                <TextField
+                    key={question.id}
+                    error={error != null}
+                    helperText={error && error.message}
+                    placeholder='Short answer text'
+                    color='secondary'
+                    style={{ width: '40%' }}
+                    onChange={e => handleAnswerChange([e.target.value])}
+                    value={question && question.answers && question.answers.length > 0 ? question.answers[0] : ''}
+                />
+            )
         }
-        case 2: {
-            return <LongAnswer />
+        case questionTypes.PARAGRAPH: {
+            return (
+                <TextField
+                    error={error != null}
+                    helperText={error && error.message}
+                    multiline
+                    fullWidth
+                    placeholder='Long answer text'
+                    color='secondary'
+                    onChange={e => handleAnswerChange([e.target.value])}
+                    value={question && question.answers && question.answers.length > 0 ? question.answers[0] : ''}
+                />
+            )
+        }
+        case questionTypes.MULTIPLE_CHOICE: {
+            return (
+                <MultipleChoice
+                    options={question.options}
+                    changeAnswers={answers => handleAnswerChange(answers)}
+                    error={error}
+                />
+            )
+        }
+        case questionTypes.CHECKBOXES: {
+            return (
+                <Checkboxes
+                    options={question.options}
+                    changeAnswers={answers => handleAnswerChange(answers)}
+                    error={error}
+                />
+            )
         }
         default: {
-            return <ShortAnswer />
+            return <div/>;
         }
     }
 }
@@ -100,13 +111,19 @@ const SurveyAnswer = props => {
     const validateSurvey = () => {
         let newErrors = [];
         questions.forEach(q => {
-            if (q.required && isEmptyOrSpaces(q.answer))
+            if (q.required && (q.answers == null || q.answers.length === 0 || q.answers.filter(a => isEmptyOrSpaces(a)).length > 0))
                 newErrors.push({ questionId: q.id, message: 'Answer is required' });
         });
 
         setErrors(newErrors);
         return newErrors;
     }
+
+    const handleAnswersChange = (answers, index) => {
+        let newQuestions = [...questions];
+        newQuestions[index].answers = answers;
+        setQuestions(newQuestions);
+    };
 
     const handleSubmitClick = e => {
         var newErrors = validateSurvey();
@@ -115,9 +132,14 @@ const SurveyAnswer = props => {
             return;
         }
 
+        let answers = [];
+        questions.forEach(q => 
+            q.answers.forEach(a => 
+                answers.push({ questionId: q.id, content: a })))
+
         let submission = {
             surveyId: survey.id,
-            answers: questions.map(q => { return { questionId: q.id, content: q.answer } })
+            answers: answers,
         }
 
         postData('https://localhost:44303/api/Submission', submission)
@@ -184,7 +206,9 @@ const SurveyAnswer = props => {
                                 <Typography variant='h5'>
                                     {item.name}
                                 </Typography>
-                                <AnswerControl question={item} error={errors.find(e => e.questionId === item.id)} />
+                                <Box mt={2}>
+                                    <AnswerControl question={item} error={errors.find(e => e.questionId === item.id)} changeAnswers={answers => handleAnswersChange(answers, index)} />
+                                </Box>
                             </CardContent>
                         </StyledCard>))
                     }
