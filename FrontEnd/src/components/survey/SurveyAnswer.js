@@ -10,6 +10,7 @@ import { isEmptyOrSpaces } from '../../helpers/stringHelper';
 import questionTypes from '../../enums/questionTypes';
 import MultipleChoice from './customized/MultipleChoice';
 import Checkboxes from './customized/Checkboxes';
+import LinearScale from './customized/LinearScale';
 
 const styles = (theme) => ({
     container: {
@@ -75,6 +76,15 @@ const AnswerControl = props => {
         case questionTypes.CHECKBOXES: {
             return (
                 <Checkboxes
+                    options={question.options}
+                    changeAnswers={answers => handleAnswerChange(answers)}
+                    error={error}
+                />
+            )
+        }
+        case questionTypes.LINEAR_SCALE: {
+            return (
+                <LinearScale
                     options={question.options}
                     changeAnswers={answers => handleAnswerChange(answers)}
                     error={error}
