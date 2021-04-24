@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Badge, Card, CardHeader, Divider, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
-import { CheckCircle } from "@material-ui/icons";
+import { Badge, Card, CardHeader, Divider, Fab, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
+import { BarChart, Check, CheckCircle, DoneAll, DoneOutline, DoneOutlined } from "@material-ui/icons";
 import { getData } from '../../helpers/requestHelper';
 import { Link } from 'react-router-dom';
 
@@ -47,12 +47,23 @@ function SurveysList(props) {
 					<div key={`survey-${index}`}>
 						<Divider variant="middle" />
 						<ListItem button component={Link} to={`/survey/answer/${item.id}`}>
-							<ListItemIcon>
+							{/* <ListItemIcon>
 								<Tooltip title="Total answers">
 									<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>
 										<CheckCircle />
 									</Badge>
 								</Tooltip>
+							</ListItemIcon> */}
+							<ListItemIcon>
+								<Link to={`/survey/results/${item.id}`}>
+									<Tooltip title="Results">
+										<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>
+											<Fab size='small' color='secondary'>
+												<BarChart />
+											</Fab>
+										</Badge>
+									</Tooltip>
+								</Link>
 							</ListItemIcon>
 							<ListItemText
 								primaryTypographyProps={{ noWrap: true, variant: 'h6' }}

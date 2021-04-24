@@ -11,5 +11,9 @@ namespace Entities.DTO
         public string Content { get; set; }
 
         public int QuestionId { get; set; }
+
+        public int SubmissionId { get; set; }
+
+        public QuestionDto Question { get; set; }
     }
 }

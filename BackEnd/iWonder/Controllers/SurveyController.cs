@@ -22,10 +22,27 @@ namespace iWonder.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}", Name = "SurveyById")]
+        [HttpGet("GetSurveyWithOptions/{id}", Name = "SurveyById")]
         public IActionResult GetSurveyById(int id)
         {
-            var survey = _repository.Survey.GetSurveyWithDetails(id);
+            var survey = _repository.Survey.GetSurveyWithOptions(id);
+            if (survey == null)
+            {
+                _logger.LogError($"Survey with id: {id}, hasn't been found.");
+                return NotFound();
+            }
+            else
+            {
+                _logger.LogInfo($"Returned Survey with id: {id}");
+                var surveyResult = _mapper.Map<SurveyDto>(survey);
+                return Ok(surveyResult);
+            }
+        }
+
+        [HttpGet("GetSurveyWithAnswers/{id}")]
+        public IActionResult GetSurveyWithAnswers(int id)
+        {
+            var survey = _repository.Survey.GetSurveyWithAnswers(id);
             if (survey == null)
             {
                 _logger.LogError($"Survey with id: {id}, hasn't been found.");

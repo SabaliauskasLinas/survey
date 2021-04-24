@@ -37,11 +37,18 @@ namespace Repository
                 .FirstOrDefault();
         }
 
-        public Survey GetSurveyWithDetails(int surveyId)
+        public Survey GetSurveyWithOptions(int surveyId)
         {
             return FindByCondition(s => s.Id.Equals(surveyId))
-                .Include(q => q.Questions)
-                .ThenInclude(o => o.Options)
+                .Include(q => q.Questions).ThenInclude(o => o.Options)
+                .FirstOrDefault();
+        }
+
+        public Survey GetSurveyWithAnswers(int surveyId)
+        {
+            return FindByCondition(s => s.Id.Equals(surveyId))
+                .Include(q => q.Questions).ThenInclude(o => o.Options)
+                .Include(q => q.Questions).ThenInclude(o => o.Answers)
                 .FirstOrDefault();
         }
 

@@ -6,9 +6,10 @@ import Surveys from "./survey/Surveys";
 import PropsRoute from "./navigation/PropsRoute";
 import SurveyCreate from "./survey/SurveyCreate";
 import SurveyAnswer from "./survey/SurveyAnswer";
+import SurveyResults from "./survey/SurveyResults";
 
 function Routing(props) {
-  const { selectSurveys, selectSurveyCreate, selectSurveyAnswer, selectHome } = props;
+  const { selectSurveys, selectSurveyCreate, selectSurveyAnswer, selectSurveyResults, selectHome } = props;
   return (
     <Switch>
       <PropsRoute
@@ -27,6 +28,11 @@ function Routing(props) {
         path="/survey/answer/:id"
         component={SurveyAnswer}
         selectSurveyAnswer={selectSurveyAnswer}
+      />
+      <PropsRoute
+        path="/survey/results/:id"
+        component={SurveyResults}
+        selectSurveyResults={selectSurveyResults}
       />
       <PropsRoute path="/" component={Home} selectHome={selectHome} />
     </Switch>

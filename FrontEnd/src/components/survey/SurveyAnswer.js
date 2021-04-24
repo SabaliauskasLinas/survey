@@ -107,7 +107,7 @@ const SurveyAnswer = props => {
 
     useEffect(() => {
         selectSurveyAnswer();
-        getData(`https://localhost:44303/api/Survey/${id}`)
+        getData(`https://localhost:44303/api/Survey/GetSurveyWithOptions/${id}`)
             .then(res => res.json())
             .then(res => {
                 setSurvey(res);
