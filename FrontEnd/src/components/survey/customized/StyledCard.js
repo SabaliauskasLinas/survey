@@ -31,7 +31,7 @@ const styles = (theme) => ({
   });
 
 function StyledCard(props) {
-    const { classes } = props;
+    const { classes, children } = props;
     const [raised, setRaised] = useState(false);
 
     const toggleRaised = (e) => {
@@ -45,7 +45,7 @@ function StyledCard(props) {
             onMouseOut={toggleRaised}
             raised={raised}
         >
-            {props.children}
+            {children}
         </Card>
     )
 }

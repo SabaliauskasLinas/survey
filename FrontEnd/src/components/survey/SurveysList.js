@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Card, CardHeader, Divider, Fab, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
-import { BarChart, Check, CheckCircle, DoneAll, DoneOutline, DoneOutlined } from "@material-ui/icons";
+import { BarChart } from "@material-ui/icons";
 import { getData } from '../../helpers/requestHelper';
 import { Link } from 'react-router-dom';
 

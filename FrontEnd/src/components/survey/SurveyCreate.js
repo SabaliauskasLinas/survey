@@ -1,6 +1,5 @@
-import { Box, Dialog, Tooltip, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import { CheckBox, Delete, RadioButtonChecked, ShortText, Subject, Add, LinearScale } from '@material-ui/icons';
-import classNames from 'classnames';
+import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button } from '@material-ui/core';
+import { Delete, Add } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
 import { withSnackbar } from '../../helpers/notificationHelper';
@@ -11,26 +10,11 @@ import LinearScaleSettings from './customized/LinearScaleSettings';
 import MultipleChoiceSettings from './customized/MultipleChoiceSettings';
 import StyledCard from './customized/StyledCard';
 import questionTypes from '../../enums/questionTypes';
+import SurveyWrapper from './customized/SurveyWrapper';
+import SurveyCreatedModal from './customized/SurveyCreatedModal';
+import questionTypesExtended from '../../enums/questionTypesExtended';
 
 const styles = (theme) => ({
-	container: {
-		marginTop: theme.spacing(6),
-		marginBottom: theme.spacing(12),
-		[theme.breakpoints.down("md")]: {
-			marginBottom: theme.spacing(9),
-		},
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: theme.spacing(6),
-		},
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: theme.spacing(3),
-		},
-	},
-	containerFix: {
-		[theme.breakpoints.up("md")]: {
-			maxWidth: "none !important",
-		},
-	},
 	inlineInputs: {
 		display: "flex",
 		justifyContent: "space-between"
@@ -38,56 +22,7 @@ const styles = (theme) => ({
 	answer: {
 		margin: theme.spacing(2)
 	},
-	fab: {
-		position: 'fixed',
-		bottom: theme.spacing(8),
-		right: theme.spacing(10),
-		[theme.breakpoints.down("md")]: {
-			bottom: theme.spacing(8),
-			right: theme.spacing(8),
-		},
-		[theme.breakpoints.down("sm")]: {
-			bottom: theme.spacing(8),
-			right: theme.spacing(6),
-		},
-		[theme.breakpoints.down("sm")]: {
-			bottom: theme.spacing(8),
-			right: theme.spacing(2),
-		},
-		[theme.breakpoints.down("xs")]: {
-			bottom: theme.spacing(8),
-			right: theme.spacing(1),
-		},
-	}
 });
-
-const questionTypesExtended = [
-	{
-		id: 1,
-		text: "Short answer",
-		icon: <ShortText />,
-	},
-	{
-		id: 2,
-		text: "Paragraph",
-		icon: <Subject />,
-	},
-	{
-		id: 3,
-		text: "Multiple choice",
-		icon: <RadioButtonChecked />,
-	},
-	{
-		id: 4,
-		text: "Checkboxes",
-		icon: <CheckBox />,
-	},
-	{
-		id: 5,
-		text: "Linear scale",
-		icon: <LinearScale />,
-	},
-]
 
 
 function QuestionTypes() {
@@ -323,137 +258,114 @@ function SurveyCreate(props) {
 	})
 
 	return (
-		<div className={"sm-p-top"}>
-			<div className={classNames("container-fluid", classes.container)}>
-				<Box display="flex" justifyContent="center" className="row">
-					<StyledCard>
-						<CardHeader
-							avatar={
-								<Avatar>
-									R
-                        		</Avatar>
-							}
-							title="Varden Pavarden"
-							subheader="Varden description"
-						/>
-						<CardContent>
-							<TextField
-								autoFocus
-								value={title}
-								onChange={handleTitleChange}
-								onBlur={handleTitleBlur}
-								required
-								multiline
-								fullWidth
-								placeholder='Survey title'
-								color='secondary'
-								inputProps={{ style: { fontSize: 35, lineHeight: 1.5 } }}
-							/>
-							<TextField
-								value={description}
-								onChange={handleDescriptionChange}
-								multiline
-								fullWidth
-								placeholder='Survey description'
-								color='secondary'
-							/>
-						</CardContent>
-					</StyledCard>
-					{questions.map((item, index) => (
-						<StyledCard key={`question-${item.key}`}>
-							<CardContent>
-								<Grid container spacing={5}>
-									<Grid item xs={12} md={8}>
-										<TextField
-											multiline
-											placeholder='Question'
-											variant="filled"
-											className={classes.question}
-											color='secondary'
-											onChange={handleQuestionChange(index)}
-											value={item.title}
-											fullWidth
-											error={errors.find(e => e.questionKey === item.key)}
-											helperText={errors.find(e => e.questionKey === item.key) && errors.find(e => e.questionKey === item.key).message}
-										/>
-									</Grid>
-									<Grid item xs={12} md={4}>
-										<Select
-											className={classes.type}
-											variant="outlined"
-											color='secondary'
-											onChange={handleTypeChange(index)}
-											value={item.questionTypeId}
-											fullWidth
-										>
-											{QuestionTypes()}
-										</Select>
-									</Grid>
-								</Grid>
-							</CardContent>
-							<div className={classes.answer}>
-								<AnswerControl question={item} changeOptions={options => handleQuestionOptionsChange(options, index)} />
-							</div>
-							<Divider variant="middle" />
-							<CardActions>
-								<IconButton onClick={handleDeleteClick(index)}>
-									<Delete />
-								</IconButton>
-								<FormControlLabel
-									control={
-										<Switch
-											checked={item.required}
-											onChange={handleRequiredChange(index)}
-											color="secondary"
-										/>
-									}
-									label="Required"
-								/>
-							</CardActions>
-						</StyledCard>))
-					}
-				</Box>
-				<Box display="flex" justifyContent="center" mb={2}>
-					<Button variant="contained" color="secondary" onClick={handleAddClick}>
-						<Add />
-                  	</Button>
-				</Box>
-				<Box display="flex" justifyContent="center" >
-					<Button variant="contained" color="primary" onClick={handleCreateClick}>
-						Create
-                  	</Button>
-				</Box>
-			</div>
-			<Warning />
-			<Dialog open={dialogOpen} onClose={handleDialogClose}>
-				<DialogTitle id="form-dialog-title">Survey successfully created</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						To share this survey, copy this link and send it to the interested parties.
-          			</DialogContentText>
-					<Tooltip title="Press CTRL + C to copy" disableHoverListener>
+		<SurveyWrapper>
+			<Box display="flex" justifyContent="center" className="row">
+				<StyledCard>
+					<CardHeader
+						avatar={
+							<Avatar>
+								R
+							</Avatar>
+						}
+						title="Varden Pavarden"
+						subheader="Varden description"
+					/>
+					<CardContent>
 						<TextField
-							id="survey-link"
-							margin="dense"
-							label="Link"
-							type="text"
+							autoFocus
+							value={title}
+							onChange={handleTitleChange}
+							onBlur={handleTitleBlur}
+							required
+							multiline
 							fullWidth
-							value={`http://localhost:3000/survey/answer/${surveyId}`}
-							onClick={handleSurveyLinkClick}
-							onFocus={handleSurveyLinkClick}
+							placeholder='Survey title'
+							color='secondary'
+							inputProps={{ style: { fontSize: 35, lineHeight: 1.5 } }}
 						/>
-					</Tooltip>
-				</DialogContent>
-				<DialogActions>
-					<Button id='exit-btn' onClick={handleDialogClose} color="primary">
-						Exit
-          			</Button>
-					<Button variant='outlined' onClick={handleCopyClick} color="secondary">
-						Copy
-          			</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
+						<TextField
+							value={description}
+							onChange={handleDescriptionChange}
+							multiline
+							fullWidth
+							placeholder='Survey description'
+							color='secondary'
+						/>
+					</CardContent>
+				</StyledCard>
+				{questions.map((item, index) => (
+					<StyledCard key={`question-${item.key}`}>
+						<CardContent>
+							<Grid container spacing={5}>
+								<Grid item xs={12} md={8}>
+									<TextField
+										multiline
+										placeholder='Question'
+										variant="filled"
+										className={classes.question}
+										color='secondary'
+										onChange={handleQuestionChange(index)}
+										value={item.title}
+										fullWidth
+										error={errors.find(e => e.questionKey === item.key)}
+										helperText={errors.find(e => e.questionKey === item.key) && errors.find(e => e.questionKey === item.key).message}
+									/>
+								</Grid>
+								<Grid item xs={12} md={4}>
+									<Select
+										className={classes.type}
+										variant="outlined"
+										color='secondary'
+										onChange={handleTypeChange(index)}
+										value={item.questionTypeId}
+										fullWidth
+									>
+										{QuestionTypes()}
+									</Select>
+								</Grid>
+							</Grid>
+						</CardContent>
+						<div className={classes.answer}>
+							<AnswerControl question={item} changeOptions={options => handleQuestionOptionsChange(options, index)} />
+						</div>
+						<Divider variant="middle" />
+						<CardActions>
+							<IconButton onClick={handleDeleteClick(index)}>
+								<Delete />
+							</IconButton>
+							<FormControlLabel
+								control={
+									<Switch
+										checked={item.required}
+										onChange={handleRequiredChange(index)}
+										color="secondary"
+									/>
+								}
+								label="Required"
+							/>
+						</CardActions>
+					</StyledCard>))
+				}
+			</Box>
+			<Box display="flex" justifyContent="center" mb={2}>
+				<Button variant="contained" color="secondary" onClick={handleAddClick}>
+					<Add />
+				</Button>
+			</Box>
+			<Box display="flex" justifyContent="center" >
+				<Button variant="contained" color="primary" onClick={handleCreateClick}>
+					Create
+				</Button>
+			</Box>
+			<Warning />
+			<SurveyCreatedModal 
+				dialogOpen={dialogOpen} 
+				handleDialogClose={handleDialogClose} 
+				handleCopyClick={handleCopyClick}
+				handleSurveyLinkClick={handleSurveyLinkClick}
+				surveyId={surveyId}
+			/>
+		</SurveyWrapper>
 	);
 }
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Box, Button, CardContent, CardHeader, TextField, Typography, withStyles } from '@material-ui/core';
+import { Avatar, Box, Button, CardContent, CardHeader, TextField, Typography } from '@material-ui/core';
 import { withSnackbar } from '../../helpers/notificationHelper';
-import classNames from 'classnames';
 import StyledCard from './customized/StyledCard';
 import { Prompt, useParams } from 'react-router-dom'
 import { getData, postData } from '../../helpers/requestHelper';
@@ -11,22 +10,7 @@ import questionTypes from '../../enums/questionTypes';
 import MultipleChoice from './customized/MultipleChoice';
 import Checkboxes from './customized/Checkboxes';
 import LinearScale from './customized/LinearScale';
-
-const styles = (theme) => ({
-    container: {
-        marginTop: theme.spacing(6),
-        marginBottom: theme.spacing(12),
-        [theme.breakpoints.down("md")]: {
-            marginBottom: theme.spacing(9),
-        },
-        [theme.breakpoints.down("sm")]: {
-            marginBottom: theme.spacing(6),
-        },
-        [theme.breakpoints.down("sm")]: {
-            marginBottom: theme.spacing(3),
-        },
-    },
-});
+import SurveyWrapper from './customized/SurveyWrapper';
 
 const AnswerControl = props => {
     const { question, error, changeAnswers } = props;
@@ -92,13 +76,13 @@ const AnswerControl = props => {
             )
         }
         default: {
-            return <div/>;
+            return <div />;
         }
     }
 }
 
 const SurveyAnswer = props => {
-    const { classes, snackbarShowMessage, selectSurveyAnswer } = props;
+    const { snackbarShowMessage, selectSurveyAnswer } = props;
     const { id } = useParams();
     const [survey, setSurvey] = useState({});
     const [questions, setQuestions] = useState([]);
@@ -143,8 +127,8 @@ const SurveyAnswer = props => {
         }
 
         let answers = [];
-        questions.forEach(q => 
-            q.answers.forEach(a => 
+        questions.forEach(q =>
+            q.answers.forEach(a =>
                 answers.push({ questionId: q.id, content: a })))
 
         let submission = {
@@ -183,54 +167,52 @@ const SurveyAnswer = props => {
     })
 
     return (
-        <div className={"sm-p-top"}>
-            <div className={classNames("container-fluid", classes.container)}>
-                <Box display="flex" justifyContent="center" className="row">
-                    <StyledCard>
-                        <CardHeader
-                            avatar={
-                                <Avatar>
-                                    R
-                                </Avatar>
-                            }
-                            title="Varden Pavarden"
-                            subheader="Varden description"
-                        />
+        <SurveyWrapper>
+            <Box display="flex" justifyContent="center" className="row">
+                <StyledCard>
+                    <CardHeader
+                        avatar={
+                            <Avatar>
+                                R
+                            </Avatar>
+                        }
+                        title="Varden Pavarden"
+                        subheader="Varden description"
+                    />
+                    <CardContent>
+                        <Typography variant="h4">
+                            {survey.name}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            {survey.description}
+                        </Typography>
+                    </CardContent>
+                </StyledCard>
+                {questions && questions.map((item, index) => (
+                    <StyledCard key={`question-${item.id}`}>
                         <CardContent>
-                            <Typography variant="h4">
-                                {survey.name}
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                {survey.description}
-                            </Typography>
-                        </CardContent>
-                    </StyledCard>
-                    {questions && questions.map((item, index) => (
-                        <StyledCard key={`question-${item.id}`}>
-                            <CardContent>
-                                {item.required &&
-                                    <Typography variant='subtitle2' color='secondary'>
-                                        Required
+                            {item.required &&
+                                <Typography variant='subtitle2' color='secondary'>
+                                    Required
                                     </Typography>
-                                }
-                                <Typography variant='h5'>
-                                    {item.name}
-                                </Typography>
-                                <Box mt={2}>
-                                    <AnswerControl question={item} error={errors.find(e => e.questionId === item.id)} changeAnswers={answers => handleAnswersChange(answers, index)} />
-                                </Box>
-                            </CardContent>
-                        </StyledCard>))
-                    }
-                </Box>
-                <Box display="flex" justifyContent="center" >
-                    <Button variant="contained" color="secondary" onClick={handleSubmitClick}>
-                        Submit
-                    </Button>
-                </Box>
-            </div>
+                            }
+                            <Typography variant='h5'>
+                                {item.name}
+                            </Typography>
+                            <Box mt={2}>
+                                <AnswerControl question={item} error={errors.find(e => e.questionId === item.id)} changeAnswers={answers => handleAnswersChange(answers, index)} />
+                            </Box>
+                        </CardContent>
+                    </StyledCard>))
+                }
+            </Box>
+            <Box display="flex" justifyContent="center" >
+                <Button variant="contained" color="secondary" onClick={handleSubmitClick}>
+                    Submit
+                </Button>
+            </Box>
             <Warning />
-        </div>
+        </SurveyWrapper>
     );
 };
 
@@ -240,4 +222,4 @@ SurveyAnswer.propTypes = {
     selectSurveyAnswer: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(withSnackbar(SurveyAnswer))
+export default withSnackbar(SurveyAnswer);
