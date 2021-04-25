@@ -15,6 +15,8 @@ namespace Entities.Models
 
         public string Description { get; set; }
 
+        public string SubmissionMessage { get; set; }
+
         public bool OneSubmission { get; set; }
 
         public int TotalAnswers { get; set; }

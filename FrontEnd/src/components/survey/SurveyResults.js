@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import questionTypes from '../../enums/questionTypes';
 import { groupBy } from '../../helpers/groupByHelper';
 import { getData } from '../../helpers/requestHelper';
+import BarChartPreview from './charts/BarChartPreview';
 import PieChartPreview from './charts/PieChartPreview';
 import StyledCard from './customized/StyledCard';
 import SurveyWrapper from './customized/SurveyWrapper';
@@ -38,12 +39,12 @@ const DataControl = props => {
         }
         case questionTypes.CHECKBOXES: {
             return (
-                <div>labas3</div>
+                <BarChartPreview question={question} axis={'y'} />
             )
         }
         case questionTypes.LINEAR_SCALE: {
             return (
-                <div>labas4</div>
+                <BarChartPreview question={question} axis={'x'} />
             )
         }
         default: {

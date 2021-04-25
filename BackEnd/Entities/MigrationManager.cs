@@ -13,7 +13,7 @@ namespace Entities
         {
             using (var scope = host.Services.CreateScope())
             {
-                using (var appContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>())
+                using (var appContext = scope.ServiceProvider.GetRequiredService<RepositoryContext>())
                 {
                     try
                     {
@@ -21,7 +21,7 @@ namespace Entities
                     }
                     catch (Exception ex)
                     {
-                        //Log errors or do anything you think it's needed
+                        Console.WriteLine(ex);
                         throw;
                     }
                 }

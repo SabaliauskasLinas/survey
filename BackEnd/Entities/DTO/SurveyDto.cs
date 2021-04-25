@@ -14,6 +14,8 @@ namespace Entities.DTO
 
         public string Description { get; set; }
 
+        public string SubmissionMessage { get; set; }
+
         public bool OneSubmission { get; set; }
 
         public DateTime CreatedAt { get; set; }

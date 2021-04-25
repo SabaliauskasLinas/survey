@@ -11,6 +11,7 @@ import MultipleChoice from './customized/MultipleChoice';
 import Checkboxes from './customized/Checkboxes';
 import LinearScale from './customized/LinearScale';
 import SurveyWrapper from './customized/SurveyWrapper';
+import SurveyAnsweredModal from './customized/SurveyAnsweredModal';
 
 const AnswerControl = props => {
     const { question, error, changeAnswers } = props;
@@ -88,6 +89,7 @@ const SurveyAnswer = props => {
     const [questions, setQuestions] = useState([]);
     const [errors, setErrors] = useState([]);
     const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         selectSurveyAnswer();
@@ -112,6 +114,15 @@ const SurveyAnswer = props => {
         setErrors(newErrors);
         return newErrors;
     }
+
+    //#region handlers
+    const handleDialogClose = () => {
+		window.location.href = '/surveys';
+	}
+
+    const handleSubmitAnotherClick = () => {
+		window.location.reload();
+	}
 
     const handleAnswersChange = (answers, index) => {
         let newQuestions = [...questions];
@@ -141,7 +152,7 @@ const SurveyAnswer = props => {
             .then(res => {
                 if (res && res.id) {
                     snackbarShowMessage('Submission successful');
-                    window.location.href = '/surveys';
+                    setDialogOpen(true);
                 }
                 else
                     snackbarShowMessage('Something went wrong', 'error');
@@ -151,6 +162,7 @@ const SurveyAnswer = props => {
                 snackbarShowMessage('Something went wrong', 'error');
             });
     };
+    //#endregion
 
     const Warning = () => (
         <React.Fragment>
@@ -194,7 +206,7 @@ const SurveyAnswer = props => {
                             {item.required &&
                                 <Typography variant='subtitle2' color='secondary'>
                                     Required
-                                    </Typography>
+                                </Typography>
                             }
                             <Typography variant='h5'>
                                 {item.name}
@@ -212,6 +224,12 @@ const SurveyAnswer = props => {
                 </Button>
             </Box>
             <Warning />
+            <SurveyAnsweredModal
+				dialogOpen={dialogOpen}
+                handleDialogClose={handleDialogClose}
+                handleSubmitAnotherClick={handleSubmitAnotherClick}
+                submissionMessage={survey.submissionMessage}
+			/>
         </SurveyWrapper>
     );
 };

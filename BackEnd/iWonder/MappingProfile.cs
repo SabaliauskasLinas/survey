@@ -8,10 +8,6 @@ namespace iWonder
     {
         public MappingProfile()
         {
-            CreateMap<Owner, OwnerDto>();
-            CreateMap<Account, AccountDto>();
-            CreateMap<OwnerForUpdateDto, Owner>();
-            CreateMap<OwnerForCreationDto, Owner>();
             CreateMap<SurveyCreationDto, Survey>();
             CreateMap<QuestionCreationDto, Question>();
             CreateMap<QuestionOptionCreationDto, QuestionOption>();

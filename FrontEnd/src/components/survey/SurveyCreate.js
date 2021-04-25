@@ -102,6 +102,7 @@ function SurveyCreate(props) {
 	const initialTitle = 'Untitled survey';
 	const [title, setTitle] = useState(initialTitle);
 	const [description, setDescription] = useState('');
+	const [submissionMessage, setSubmissionMessage] = useState('');
 	const [questions, setQuestions] = useState([{ questionTypeId: 1, required: true, key: Math.random() }]);
 	const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
 	const [errors, setErrors] = useState([]);
@@ -183,6 +184,7 @@ function SurveyCreate(props) {
 			userId: 1,
 			oneSubmission: false,
 			questions: questions,
+			submissionMessage: submissionMessage,
 		};
 
 		// TODO: postData('Survey', {...})
@@ -215,6 +217,10 @@ function SurveyCreate(props) {
 
 	const handleDescriptionChange = (e) => {
 		setDescription(e.target.value);
+	};
+
+	const handleSubmissionMessageChange = (e) => {
+		setSubmissionMessage(e.target.value);
 	};
 
 	const handleQuestionChange = index => e => {
@@ -276,20 +282,32 @@ function SurveyCreate(props) {
 							value={title}
 							onChange={handleTitleChange}
 							onBlur={handleTitleBlur}
-							required
 							multiline
 							fullWidth
-							placeholder='Survey title'
+							placeholder='Title'
 							color='secondary'
 							inputProps={{ style: { fontSize: 35, lineHeight: 1.5 } }}
+							margin='dense'
+							label="Title"
 						/>
 						<TextField
 							value={description}
 							onChange={handleDescriptionChange}
 							multiline
 							fullWidth
-							placeholder='Survey description'
 							color='secondary'
+							label="Description"
+							margin='dense'
+						/>
+						<TextField
+							value={submissionMessage}
+							onChange={handleSubmissionMessageChange}
+							multiline
+							fullWidth
+							placeholder='Your response has been recorded.'
+							color='secondary'
+							label="Submission message"
+							margin='dense'
 						/>
 					</CardContent>
 				</StyledCard>
@@ -358,9 +376,9 @@ function SurveyCreate(props) {
 				</Button>
 			</Box>
 			<Warning />
-			<SurveyCreatedModal 
-				dialogOpen={dialogOpen} 
-				handleDialogClose={handleDialogClose} 
+			<SurveyCreatedModal
+				dialogOpen={dialogOpen}
+				handleDialogClose={handleDialogClose}
 				handleCopyClick={handleCopyClick}
 				handleSurveyLinkClick={handleSurveyLinkClick}
 				surveyId={surveyId}
