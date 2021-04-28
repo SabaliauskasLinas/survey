@@ -13,10 +13,10 @@ const SurveyAnsweredModal = (props) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button id='exit-btn' onClick={handleDialogClose} color="primary">
+                <Button id='exit-btn' onClick={handleDialogClose} color="secondary">
                     Exit
                 </Button>
-                <Button variant='outlined' onClick={handleSubmitAnotherClick} color="secondary">
+                <Button variant='outlined' onClick={handleSubmitAnotherClick} color="primary">
                     Submit another response
                 </Button>
             </DialogActions>

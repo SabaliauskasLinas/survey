@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Entities.Models
 {
@@ -19,9 +18,13 @@ namespace Entities.Models
 
         public string Description { get; set; }
 
+        public string Email { get; set; }
+
+        [JsonIgnore]
+        public byte[] PasswordHash { get; set; }
+
+        public byte[] PasswordSalt { get; set; }
+
         public ICollection<Survey> Surveys { get; set; }
-        //public string Username { get; set; }
-        //public string PasswordHash { get; set; }
-        //public string AvatarImage { get; set; }
     }
 }

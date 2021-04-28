@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Entities;
+using iWonder.Helpers;
+using iWonder.Services;
 using Logger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +36,6 @@ namespace iWonder.Extensions
             });
         }
 
-        public static void ConfigureLoggerService(this IServiceCollection services)
-        {
-            services.AddSingleton<ILoggerManager, LoggerManager>();
-        }
-
         public static void ConfigureSqlServerContext(this IServiceCollection services, IConfiguration config)
         {
             services.AddDbContext<RepositoryContext>(opts =>
@@ -46,9 +43,16 @@ namespace iWonder.Extensions
                 options => options.MigrationsAssembly("iWonder")));
         }
 
-        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        public static void ConfigureDependencyInjections(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+            services.AddScoped<IUserService, UserService>();
+        }
+
+        public static void ConfigureAppSettings(this IServiceCollection services, IConfiguration config)
+        {
+            services.Configure<AppSettings>(config.GetSection("AppSettings"));
         }
     }
 }

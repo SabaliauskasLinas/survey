@@ -1,5 +1,6 @@
 using Contracts;
 using iWonder.Extensions;
+using iWonder.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +26,9 @@ namespace iWonder
         {
             services.ConfigureCors();
             services.ConfigureIISIntegration();
-            services.ConfigureLoggerService();
+            services.ConfigureDependencyInjections();
             services.ConfigureSqlServerContext(Configuration);
-            services.ConfigureRepositoryWrapper();
+            services.ConfigureAppSettings(Configuration);
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -55,12 +56,9 @@ namespace iWonder
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

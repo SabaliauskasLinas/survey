@@ -65,7 +65,7 @@ const styles = (theme) => ({
     },
     wrapper: {
       position: "relative",
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.primary.main,
       paddingBottom: theme.spacing(2),
     },
     image: {
@@ -140,7 +140,7 @@ function Home(props) {
                         </Box>
                         <Button
                           variant="contained"
-                          color="secondary"
+                          color="primary"
                           fullWidth
                           className={classes.extraLargeButton}
                           classes={{ label: classes.extraLargeButtonLabel }}
@@ -159,7 +159,7 @@ function Home(props) {
         </div>
       </div>
       <WaveBorder
-        upperColor={theme.palette.secondary.main}
+        upperColor={theme.palette.primary.main}
         lowerColor="#f5f5f5"
         className={classes.waveBorder}
         animationNegativeDelay={2}

@@ -1,8 +1,8 @@
 import { unstable_createMuiStrictModeTheme as createMuiTheme, responsiveFontSizes } from "@material-ui/core";
 
 // colors
-const primary = "#101820FF";
-const secondary = "#F2AA4CFF";
+const primary = "#F2AA4CFF";
+const secondary = "#101820FF";
 const black = "#343a40";
 const darkBlack = "rgb(36, 40, 44)";
 const background = "#f5f5f5";

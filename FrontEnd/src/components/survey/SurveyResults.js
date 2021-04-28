@@ -84,7 +84,7 @@ const SurveyResults = (props) => {
                 {survey.questions && survey.questions.map((item, index) => (
                     <StyledCard key={`question-${item.id}`}>
                         <CardContent>
-                            <Typography variant='subtitle2' color='secondary'>
+                            <Typography variant='subtitle2' color='primary'>
                                 {groupBy(item.answers, 'submissionId').length} responses
                             </Typography>
                             <Typography variant='h5'>

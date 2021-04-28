@@ -46,7 +46,7 @@ function AnswerControl(props) {
 			return (
 				<TextField
 					placeholder='Short answer text'
-					color='secondary'
+					color='primary'
 					disabled
 					style={{ width: '40%' }}
 				/>
@@ -58,7 +58,7 @@ function AnswerControl(props) {
 					multiline
 					fullWidth
 					placeholder='Long answer text'
-					color='secondary'
+					color='primary'
 					disabled
 				/>
 			)
@@ -88,7 +88,7 @@ function AnswerControl(props) {
 			return (
 				<TextField
 					placeholder='Short answer text'
-					color='secondary'
+					color='primary'
 					disabled
 					style={{ width: '40%' }}
 				/>
@@ -285,7 +285,7 @@ function SurveyCreate(props) {
 							multiline
 							fullWidth
 							placeholder='Title'
-							color='secondary'
+							color='primary'
 							inputProps={{ style: { fontSize: 35, lineHeight: 1.5 } }}
 							margin='dense'
 							label="Title"
@@ -295,7 +295,7 @@ function SurveyCreate(props) {
 							onChange={handleDescriptionChange}
 							multiline
 							fullWidth
-							color='secondary'
+							color='primary'
 							label="Description"
 							margin='dense'
 						/>
@@ -305,7 +305,7 @@ function SurveyCreate(props) {
 							multiline
 							fullWidth
 							placeholder='Your response has been recorded.'
-							color='secondary'
+							color='primary'
 							label="Submission message"
 							margin='dense'
 						/>
@@ -321,7 +321,7 @@ function SurveyCreate(props) {
 										placeholder='Question'
 										variant="filled"
 										className={classes.question}
-										color='secondary'
+										color='primary'
 										onChange={handleQuestionChange(index)}
 										value={item.title}
 										fullWidth
@@ -333,7 +333,7 @@ function SurveyCreate(props) {
 									<Select
 										className={classes.type}
 										variant="outlined"
-										color='secondary'
+										color='primary'
 										onChange={handleTypeChange(index)}
 										value={item.questionTypeId}
 										fullWidth
@@ -356,7 +356,7 @@ function SurveyCreate(props) {
 									<Switch
 										checked={item.required}
 										onChange={handleRequiredChange(index)}
-										color="secondary"
+										color="primary"
 									/>
 								}
 								label="Required"
@@ -366,7 +366,7 @@ function SurveyCreate(props) {
 				}
 			</Box>
 			<Box display="flex" justifyContent="center" mb={2}>
-				<Button variant="contained" color="secondary" onClick={handleAddClick}>
+				<Button variant="contained" color="primary" onClick={handleAddClick}>
 					<Add />
 				</Button>
 			</Box>

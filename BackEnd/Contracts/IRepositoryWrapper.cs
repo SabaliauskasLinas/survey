@@ -8,6 +8,7 @@ namespace Contracts
     {
         ISurveyRepository Survey { get; }
         ISubmissionRepository Submission { get; }
+        IUserRepository User { get; }
         void Save();
     }
 }

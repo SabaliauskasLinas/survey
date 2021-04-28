@@ -28,7 +28,7 @@ const AnswerControl = props => {
                     error={error != null}
                     helperText={error && error.message}
                     placeholder='Short answer text'
-                    color='secondary'
+                    color='primary'
                     style={{ width: '40%' }}
                     onChange={e => handleAnswerChange([e.target.value])}
                     value={question && question.answers && question.answers.length > 0 ? question.answers[0] : ''}
@@ -43,7 +43,7 @@ const AnswerControl = props => {
                     multiline
                     fullWidth
                     placeholder='Long answer text'
-                    color='secondary'
+                    color='primary'
                     onChange={e => handleAnswerChange([e.target.value])}
                     value={question && question.answers && question.answers.length > 0 ? question.answers[0] : ''}
                 />
@@ -204,7 +204,7 @@ const SurveyAnswer = props => {
                     <StyledCard key={`question-${item.id}`}>
                         <CardContent>
                             {item.required &&
-                                <Typography variant='subtitle2' color='secondary'>
+                                <Typography variant='subtitle2' color='primary'>
                                     Required
                                 </Typography>
                             }
@@ -219,7 +219,7 @@ const SurveyAnswer = props => {
                 }
             </Box>
             <Box display="flex" justifyContent="center" >
-                <Button variant="contained" color="secondary" onClick={handleSubmitClick}>
+                <Button variant="contained" color="primary" onClick={handleSubmitClick}>
                     Submit
                 </Button>
             </Box>

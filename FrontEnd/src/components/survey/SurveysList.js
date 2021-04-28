@@ -3,10 +3,13 @@ import { Badge, Card, CardHeader, Divider, Fab, List, ListItem, ListItemIcon, Li
 import { BarChart } from "@material-ui/icons";
 import { getData } from '../../helpers/requestHelper';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../helpers/LoadingSpinner';
 
 function SurveysList(props) {
 	const { title, type } = props;
 	const [surveys, setSurveys] = useState([]);
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
 		let endpoint = '';
 		switch (type) {
@@ -25,9 +28,11 @@ function SurveysList(props) {
 				.then(res => res.json())
 				.then(res => {
 					setSurveys(res);
+					setLoading(false);
 				})
 				.catch(er => {
 					console.log(er)
+					setLoading(false);
 				});
 		}
 	}, [type]);
@@ -38,12 +43,13 @@ function SurveysList(props) {
 				title={title}
 			/>
 			<List component="nav" aria-label="main mailbox folders">
-				{ (!surveys || surveys.length === 0) &&
+				{ loading && <LoadingSpinner /> }
+				{ !loading && (!surveys || surveys.length === 0) &&
 					<Typography variant="h5" align={'center'}>
 						Could not load data
 					</Typography>
 				}
-				{surveys && surveys.map((item, index) => (
+				{ !loading && surveys && surveys.map((item, index) => (
 					<div key={`survey-${index}`}>
 						<Divider variant="middle" />
 						<ListItem button component={Link} to={`/survey/answer/${item.id}`}>
@@ -57,8 +63,8 @@ function SurveysList(props) {
 							<ListItemIcon>
 								<Link to={`/survey/results/${item.id}`}>
 									<Tooltip title="Results">
-										<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>
-											<Fab size='small' color='secondary'>
+										<Badge badgeContent={item.totalAnswers} color="primary" showZero max={999}>
+											<Fab size='small' color='primary'>
 												<BarChart />
 											</Fab>
 										</Badge>
@@ -83,8 +89,7 @@ function SurveysList(props) {
 									</React.Fragment>
 								} />
 						</ListItem>
-					</div>
-				))
+					</div>))
 				}
 			</List>
 		</Card>

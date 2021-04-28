@@ -11,6 +11,7 @@ namespace Repository
         private RepositoryContext _repoContext;
         private ISurveyRepository _survey;
         private ISubmissionRepository _submission;
+        private IUserRepository _user;
 
         public ISurveyRepository Survey
         {
@@ -33,6 +34,18 @@ namespace Repository
                     _submission = new SubmissionRepository(_repoContext);
                 }
                 return _submission;
+            }
+        }
+
+        public IUserRepository User
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = new UserRepository(_repoContext);
+                }
+                return _user;
             }
         }
 

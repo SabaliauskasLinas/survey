@@ -24,10 +24,10 @@ const SurveyCreatedModal = (props) => {
                 </Tooltip>
             </DialogContent>
             <DialogActions>
-                <Button id='exit-btn' onClick={handleDialogClose} color="primary">
+                <Button id='exit-btn' onClick={handleDialogClose} color="secondary">
                     Exit
                 </Button>
-                <Button variant='outlined' onClick={handleCopyClick} color="secondary">
+                <Button variant='outlined' onClick={handleCopyClick} color="primary">
                     Copy
                 </Button>
             </DialogActions>

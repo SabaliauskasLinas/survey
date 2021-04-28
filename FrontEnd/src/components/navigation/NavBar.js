@@ -87,7 +87,7 @@ function NavBar(props) {
                 variant="h4"
                 className={classes.brandText}
                 display="inline"
-                color="primary"
+                color="secondary"
               >
                 i
               </Typography>
@@ -95,7 +95,7 @@ function NavBar(props) {
                 variant="h4"
                 className={classes.brandText}
                 display="inline"
-                color="secondary"
+                color="primary"
               >
                 Wonder
               </Typography>
@@ -104,7 +104,7 @@ function NavBar(props) {
               component={Link}
               to='/survey/create'
               variant="outlined"
-              color="primary"
+              color="secondary"
               className={classes.createSurveyButton}
               startIcon={<AddIcon />}
               size="large"
@@ -133,7 +133,7 @@ function NavBar(props) {
                       onClick={handleMobileDrawerClose}
                     >
                       <Button
-                        color="primary"
+                        color="secondary"
                         size="large"
                         classes={{ text: classes.menuButtonText }}
                       >
@@ -144,7 +144,7 @@ function NavBar(props) {
                 }
                 return (
                   <Button
-                    color="primary"
+                    color="secondary"
                     size="large"
                     onClick={element.onClick}
                     classes={{ text: classes.menuButtonText }}
