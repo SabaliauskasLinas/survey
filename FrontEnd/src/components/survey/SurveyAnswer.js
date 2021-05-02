@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Box, Button, CardContent, CardHeader, TextField, Typography } from '@material-ui/core';
 import { withSnackbar } from '../../helpers/notificationHelper';
@@ -16,9 +16,9 @@ import SurveyAnsweredModal from './customized/SurveyAnsweredModal';
 const AnswerControl = props => {
     const { question, error, changeAnswers } = props;
 
-    const handleAnswerChange = answer => {
+    const handleAnswerChange = useCallback(answer => {
         changeAnswers(answer);
-    }
+    }, [changeAnswers]);
 
     switch (question.questionTypeId) {
         case questionTypes.SHORT_ANSWER: {
@@ -83,18 +83,17 @@ const AnswerControl = props => {
 }
 
 const SurveyAnswer = props => {
-    const { snackbarShowMessage, selectSurveyAnswer } = props;
+    const { snackbarShowMessage, selectSurveyAnswer, currentUser } = props;
     const { id } = useParams();
     const [survey, setSurvey] = useState({});
     const [questions, setQuestions] = useState([]);
     const [errors, setErrors] = useState([]);
-    const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
+    const [shouldBlockNavigation] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         selectSurveyAnswer();
-        getData(`https://localhost:44303/api/Survey/GetSurveyWithOptions/${id}`)
-            .then(res => res.json())
+        getData(`Survey/GetSurveyWithOptions/${id}`)
             .then(res => {
                 setSurvey(res);
                 setQuestions(res.questions);
@@ -124,11 +123,12 @@ const SurveyAnswer = props => {
 		window.location.reload();
 	}
 
-    const handleAnswersChange = (answers, index) => {
+    const handleAnswersChange = useCallback(
+        (answers, index) => {
         let newQuestions = [...questions];
         newQuestions[index].answers = answers;
         setQuestions(newQuestions);
-    };
+    }, [questions]);
 
     const handleSubmitClick = e => {
         var newErrors = validateSurvey();
@@ -145,10 +145,10 @@ const SurveyAnswer = props => {
         let submission = {
             surveyId: survey.id,
             answers: answers,
+            userId: currentUser.id,
         }
 
-        postData('https://localhost:44303/api/Submission', submission)
-            .then(res => res.json())
+        postData('Submission', submission)
             .then(res => {
                 if (res && res.id) {
                     snackbarShowMessage('Submission successful');
@@ -235,9 +235,9 @@ const SurveyAnswer = props => {
 };
 
 SurveyAnswer.propTypes = {
-    classes: PropTypes.object.isRequired,
     snackbarShowMessage: PropTypes.func.isRequired,
     selectSurveyAnswer: PropTypes.func.isRequired,
+    currentUser: PropTypes.object,
 };
 
 export default withSnackbar(SurveyAnswer);

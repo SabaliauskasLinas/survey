@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.DTO;
 using Entities.Models;
+using iWonder.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -22,6 +23,7 @@ namespace iWonder.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet("GetSurveyWithOptions/{id}", Name = "SurveyById")]
         public IActionResult GetSurveyById(int id)
         {
@@ -39,6 +41,7 @@ namespace iWonder.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetSurveyWithAnswers/{id}")]
         public IActionResult GetSurveyWithAnswers(int id)
         {
@@ -74,6 +77,7 @@ namespace iWonder.Controllers
             return Ok(surveysResult);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateSurvey([FromBody] SurveyCreationDto survey)
         {

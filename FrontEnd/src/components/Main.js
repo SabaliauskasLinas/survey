@@ -106,6 +106,7 @@ function Main(props) {
 			<DialogSelector
 				openLoginDialog={openLoginDialog}
 				dialogOpen={dialogOpen}
+				setDialogOpen={setDialogOpen}
 				onClose={closeDialog}
 				openTermsDialog={openTermsDialog}
 				openRegisterDialog={openRegisterDialog}
@@ -119,9 +120,11 @@ function Main(props) {
 				handleMobileDrawerClose={handleMobileDrawerClose}
 				openLoginDialog={openLoginDialog}
 				openRegisterDialog={openRegisterDialog}
+				setDialogOpen={setDialogOpen}
 			/>
 			<Routing
 				selectHome={selectHome}
+				setDialogOpen={setDialogOpen}
 				selectSurveys={selectSurveys}
 				selectSurveyCreate={selectSurveyCreate}
 				selectSurveyAnswer={selectSurveyAnswer}

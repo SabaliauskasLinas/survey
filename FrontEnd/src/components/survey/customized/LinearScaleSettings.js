@@ -9,20 +9,19 @@ const LinearScaleSettings = (props) => {
 
     useEffect(() => {
         handleOptionsChange(minimum, maximum);
-    }, []);
+    }, [minimum, maximum]);
 
     useEffect(() => {
         setQuestionOptions(options);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [options]);
 
     const handleMinimumChange = e => {
         setMinimum(e.target.value);
-        handleOptionsChange(e.target.value, maximum);
     }
 
     const handleMaximumChange = e => {
         setMaximum(e.target.value);
-        handleOptionsChange(minimum, e.target.value);
     }
 
     const handleOptionsChange = (minimum, maximum) => {

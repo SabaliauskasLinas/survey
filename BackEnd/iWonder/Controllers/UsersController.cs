@@ -20,7 +20,7 @@ namespace iWonder.Controllers
             _userService = userService;
         }
 
-        [HttpPost("authenticate")]
+        [HttpPost("Authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
             var response = _userService.Authenticate(model);
@@ -31,7 +31,7 @@ namespace iWonder.Controllers
             return Ok(response);
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public IActionResult Register(RegistrationRequest model)
         {
             var response = _userService.Register(model);
@@ -40,6 +40,12 @@ namespace iWonder.Controllers
                 return BadRequest(new { message = response.ErrorMessage });
 
             return Ok(response);
+        }
+
+        [HttpGet("EmailExists")]
+        public IActionResult EmailExists(string email)
+        {
+            return Ok(_userService.EmailExists(email));
         }
 
         [Authorize]

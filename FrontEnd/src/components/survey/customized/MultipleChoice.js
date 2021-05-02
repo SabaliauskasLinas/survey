@@ -13,6 +13,7 @@ const MultipleChoice = (props) => {
     useEffect(() => {
         if (!isEmptyOrSpaces(answer))
             changeAnswers([answer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answer]);
 
     return (

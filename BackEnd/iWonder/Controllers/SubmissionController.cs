@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.DTO;
 using Entities.Models;
+using iWonder.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iWonder.Controllers
@@ -21,6 +22,7 @@ namespace iWonder.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet("{id}", Name = "SubmissionById")]
         public IActionResult GetSubmissionById(int id)
         {

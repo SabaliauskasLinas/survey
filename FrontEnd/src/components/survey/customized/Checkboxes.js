@@ -17,6 +17,7 @@ const Checkboxes = (props) => {
 
     useEffect(() => {
         changeAnswers(answers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answers]);
 
     return (

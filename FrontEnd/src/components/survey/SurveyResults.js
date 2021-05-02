@@ -25,7 +25,7 @@ const DataControl = props => {
             return (
                 <div>
                     { question.answers.map((answer, index) => (
-                        <Typography paragraph className={classes.grayBackground}>
+                        <Typography key={`answer-${answer.id}`} paragraph className={classes.grayBackground}>
                             {answer.content}
                         </Typography>))
                     }
@@ -60,8 +60,7 @@ const SurveyResults = (props) => {
 
     useEffect(() => {
         selectSurveyResults();
-        getData(`https://localhost:44303/api/Survey/GetSurveyWithAnswers/${id}`)
-            .then(res => res.json())
+        getData(`Survey/GetSurveyWithAnswers/${id}`)
             .then(res => setSurvey(res))
             .catch(er => {
                 console.log(er)

@@ -20,6 +20,7 @@ function VisibilityPasswordTextField(props) {
 							onMouseDown={(event) => {
 								event.preventDefault();
 							}}
+							tabIndex="-1"
 						>
 							{isVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
 						</IconButton>

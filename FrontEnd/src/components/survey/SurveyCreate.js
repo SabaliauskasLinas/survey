@@ -98,13 +98,13 @@ function AnswerControl(props) {
 }
 
 function SurveyCreate(props) {
-	const { classes, snackbarShowMessage, selectSurveyCreate } = props;
+	const { classes, snackbarShowMessage, selectSurveyCreate, currentUser } = props;
 	const initialTitle = 'Untitled survey';
 	const [title, setTitle] = useState(initialTitle);
 	const [description, setDescription] = useState('');
 	const [submissionMessage, setSubmissionMessage] = useState('');
 	const [questions, setQuestions] = useState([{ questionTypeId: 1, required: true, key: Math.random() }]);
-	const [shouldBlockNavigation, SetShouldBlockNavigation] = useState(false);
+	const [shouldBlockNavigation] = useState(false);
 	const [errors, setErrors] = useState([]);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [surveyId, setSurveyId] = useState(0);
@@ -181,17 +181,14 @@ function SurveyCreate(props) {
 		let survey = {
 			name: title,
 			description: description,
-			userId: 1,
+			userId: currentUser.id,
 			oneSubmission: false,
 			questions: questions,
 			submissionMessage: submissionMessage,
 		};
 
-		// TODO: postData('Survey', {...})
-		postData('https://localhost:44303/api/Survey', survey)
-			.then(res => res.json())
+		postData('Survey', survey)
 			.then(res => {
-				console.log(res);
 				if (res && res.id) {
 					setSurveyId(res.id);
 					setDialogOpen(true);

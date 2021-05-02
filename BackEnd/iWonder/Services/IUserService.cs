@@ -8,6 +8,7 @@ namespace iWonder.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         RegistrationResponse Register(RegistrationRequest model);
+        bool EmailExists(string email);
         IEnumerable<User> GetAll();
         User GetById(int id);
     }

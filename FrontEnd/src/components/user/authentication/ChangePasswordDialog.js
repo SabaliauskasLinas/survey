@@ -88,7 +88,6 @@ ChangePassword.propTypes = {
 	onClose: PropTypes.func.isRequired,
 	classes: PropTypes.object.isRequired,
 	theme: PropTypes.object.isRequired,
-	setLoginStatus: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(ChangePassword);

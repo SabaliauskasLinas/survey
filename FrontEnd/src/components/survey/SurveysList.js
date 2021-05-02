@@ -24,8 +24,7 @@ function SurveysList(props) {
 		}
 
 		if (endpoint) {
-			getData(`https://localhost:44303/api/Survey/${endpoint}`)
-				.then(res => res.json())
+			getData(`Survey/${endpoint}`)
 				.then(res => {
 					setSurveys(res);
 					setLoading(false);

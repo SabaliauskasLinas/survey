@@ -12,7 +12,7 @@ import {
   isWidthUp,
 } from "@material-ui/core";
 import WaveBorder from "./WaveBorder";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const styles = (theme) => ({
     extraLargeButtonLabel: {
@@ -98,10 +98,19 @@ const styles = (theme) => ({
   });
 
 function Home(props) {
-  const { selectHome, classes, theme, width } = props;
+  const { selectHome, setDialogOpen, classes, theme, width, currentUser } = props;
+  var history = useHistory();
+
   useEffect(() => {
     selectHome();
   }, [selectHome]);
+
+  const handleCreateSurveyClick = () => {
+		history.push('/survey/create');
+		if (!currentUser)
+			setDialogOpen('login');
+	}
+
   return (
     <Fragment>
       <div className={classNames("lg-p-top", classes.wrapper)}>
@@ -144,8 +153,7 @@ function Home(props) {
                           fullWidth
                           className={classes.extraLargeButton}
                           classes={{ label: classes.extraLargeButtonLabel }}
-                          component={Link}
-                          to={'/survey/create'}
+                          onClick={handleCreateSurveyClick}
                         >
                           Create Survey
                         </Button>
@@ -170,7 +178,9 @@ function Home(props) {
 
 Home.propTypes = {
     selectHome: PropTypes.func.isRequired,
+    setDialogOpen: PropTypes.func.isRequired,
     classes: PropTypes.object,
+    currentUser: PropTypes.object,
     width: PropTypes.string,
     theme: PropTypes.object,
 };

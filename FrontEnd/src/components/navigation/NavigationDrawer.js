@@ -84,14 +84,10 @@ function NavigationDrawer(props) {
                 <ListItem
                   button
                   selected={selectedItem === element.name}
-                  /**
-                   * We disable ripple as it will make a weird animation
-                   * with primary and secondary color
-                   */
                   disableRipple
                   disableTouchRipple
                 >
-                  <ListItemIcon>{element.icon}</ListItemIcon>
+                  <ListItemIcon className="text-white">{element.icon}</ListItemIcon>
                   <ListItemText
                     primary={
                       <Typography variant="subtitle1" className="text-white">
@@ -105,7 +101,7 @@ function NavigationDrawer(props) {
           }
           return (
             <ListItem button key={element.name} onClick={element.onClick}>
-              <ListItemIcon>{element.icon}</ListItemIcon>
+              <ListItemIcon className="text-white">{element.icon}</ListItemIcon>
               <ListItemText
                 primary={
                   <Typography variant="subtitle1" className="text-white">

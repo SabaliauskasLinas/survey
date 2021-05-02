@@ -8,6 +8,7 @@ namespace Contracts
     public interface IUserRepository
     {
         User GetUserByEmail(string email);
+        User GetUserById(int id);
         void CreateUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);

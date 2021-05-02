@@ -12,9 +12,21 @@ import {
 import FormDialog from "./FormDialog";
 import LoadingSpinner from "../../helpers/LoadingSpinner";
 import VisibilityPasswordTextField from "../../helpers/VisibilityPasswordTextField";
-import { postData } from "../../../helpers/requestHelper";
+import { getData, postData } from "../../../helpers/requestHelper";
+import { isEmptyOrSpaces } from "../../../helpers/stringHelper";
 
 const styles = (theme) => ({
+	additionalAction: {
+		marginTop: theme.spacing(2),
+		color: theme.palette.primary.main,
+		cursor: "pointer",
+		"&:enabled:hover": {
+			color: theme.palette.primary.dark,
+		},
+		"&:enabled:focus": {
+			color: theme.palette.primary.dark,
+		},
+	},
 	link: {
 		transition: theme.transitions.create(["background-color"], {
 			duration: theme.transitions.duration.complex,
@@ -32,13 +44,14 @@ const styles = (theme) => ({
 });
 
 function RegisterDialog(props) {
-	const { theme, onClose, openTermsDialog, classes } = props;
+	const { theme, onClose, openTermsDialog, classes, showMessage, setDialogOpen } = props;
 	const [status, setStatus] = useState(null);
+	const [email, setEmail] = useState('');
+	const [timer, setTimer] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasTermsOfServiceError, setHasTermsOfServiceError] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const registerTermsCheckbox = useRef();
-	const registerEmail = useRef();
 	const registerFirstName = useRef();
 	const registerLastName = useRef();
 	const registerPassword = useRef();
@@ -54,12 +67,20 @@ function RegisterDialog(props) {
 			return;
 		}
 		setStatus(null);
-		setIsLoading(true);
-		postData('https://localhost:44303/api/Users/Register', { 
-			email: registerEmail.current.value,
+		postData('Users/Register', { 
+			email: email,
 			firstName: registerFirstName.current.value,
 			lastName: registerLastName.current.value,
 			password: registerPassword.current.value 
+		})
+		.then(res => {
+			showMessage('Registration successful, please log in');
+			setIsLoading(false);
+			setDialogOpen('login');
+		})
+		.catch(er => {
+			setStatus("emailExists");
+			setIsLoading(false);
 		});
 	}, [
 		setIsLoading,
@@ -68,10 +89,29 @@ function RegisterDialog(props) {
 		registerPassword,
 		registerPasswordRepeat,
 		registerTermsCheckbox,
-		registerEmail,
 		registerFirstName,
-		registerLastName
+		registerLastName,
+		email,
+		showMessage,
+		setDialogOpen,
 	]);
+
+	const checkEmail = email => {
+		if(!isEmptyOrSpaces(email))
+			getData('Users/EmailExists', { email })
+			.then(exists => {
+				if(exists)
+					setStatus("emailExists");
+			})
+	}
+
+	const handleEmailChange = e => {
+		clearTimeout(timer);
+		setEmail(e.target.value);
+		setTimer(setTimeout(()=>{
+			checkEmail(e.target.value);
+		}, 500));        
+	}
 
 	return (
 		<FormDialog
@@ -92,23 +132,6 @@ function RegisterDialog(props) {
 						margin="normal"
 						required
 						fullWidth
-						error={status === "invalidEmail"}
-						label="Email Address"
-						autoFocus
-						autoComplete="off"
-						type="email"
-						inputRef={registerEmail}
-						onChange={() => {
-							if (status === "invalidEmail")
-								setStatus(null);
-						}}
-						FormHelperTextProps={{ error: true }}
-					/>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
 						error={status === "invalidFirstName"}
 						label="First Name"
 						autoComplete="off"
@@ -119,6 +142,7 @@ function RegisterDialog(props) {
 								setStatus(null);
 						}}
 						FormHelperTextProps={{ error: true }}
+						InputLabelProps={{ required: false }}
 					/>
 					<TextField
 						variant="outlined"
@@ -135,6 +159,31 @@ function RegisterDialog(props) {
 								setStatus(null);
 						}}
 						FormHelperTextProps={{ error: true }}
+						InputLabelProps={{ required: false }}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						error={status === "invalidEmail"}
+						label="Email Address"
+						autoFocus
+						autoComplete="off"
+						type="email"
+						value={email}
+						onChange={e => {
+							handleEmailChange(e);
+							if (status === "invalidEmail" || status === "emailExists")
+								setStatus(null);
+						}}
+						helperText={(() => {
+							if (status === "emailExists")
+								return "Email address already in use";
+							return null;
+						})()}
+						FormHelperTextProps={{ error: true }}
+						InputLabelProps={{ required: false }}
 					/>
 					<VisibilityPasswordTextField
 						variant="outlined"
@@ -157,6 +206,7 @@ function RegisterDialog(props) {
 							return null;
 						})()}
 						FormHelperTextProps={{ error: true }}
+						InputLabelProps={{ required: false }}
 						isVisible={isPasswordVisible}
 						onVisibilityChange={setIsPasswordVisible}
 					/>
@@ -180,6 +230,7 @@ function RegisterDialog(props) {
 								return "Your passwords dont match.";
 						})()}
 						FormHelperTextProps={{ error: true }}
+						InputLabelProps={{ required: false }}
 						isVisible={isPasswordVisible}
 						onVisibilityChange={setIsPasswordVisible}
 					/>
@@ -223,17 +274,28 @@ function RegisterDialog(props) {
 				</Fragment>
 			}
 			actions={
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					size="large"
-					color="primary"
-					disabled={isLoading}
-				>
-					Register
-          			{isLoading && <LoadingSpinner />}
-				</Button>
+				<Fragment>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							size="large"
+							color="primary"
+							disabled={isLoading || status != null}
+						>
+							Register
+							{isLoading && <LoadingSpinner />}
+						</Button>
+						<Typography
+							align="center"
+							className={classes.additionalAction}
+							onClick={() => setDialogOpen('login')}
+							tabIndex={0}
+							role="button"
+						>
+							Already have an account?
+            			</Typography>
+				</Fragment>
 			}
 		/>
 	);
@@ -242,9 +304,10 @@ function RegisterDialog(props) {
 RegisterDialog.propTypes = {
 	theme: PropTypes.object.isRequired,
 	onClose: PropTypes.func.isRequired,
+	setDialogOpen: PropTypes.func.isRequired,
 	openTermsDialog: PropTypes.func.isRequired,
+	showMessage: PropTypes.func.isRequired,
 	status: PropTypes.string,
-	setStatus: PropTypes.func.isRequired,
 	classes: PropTypes.object.isRequired,
 };
 

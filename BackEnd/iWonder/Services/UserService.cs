@@ -45,8 +45,8 @@ namespace iWonder.Services
                 return new RegistrationResponse { ErrorMessage = "User with a specified email already exists" };
 
             var salt = SecurityHelper.GetSalt();
-
             var saltedHash = SecurityHelper.GenerateSaltedHash(Encoding.UTF8.GetBytes(model.Password), salt);
+
             _repository.User.CreateUser(new User
             {
                 FirstName = model.FirstName,
@@ -68,20 +68,25 @@ namespace iWonder.Services
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            return _repository.User.GetUserById(id);
+        }
+
+        public bool EmailExists(string email)
+        {
+            var existingUser = _repository.User.GetUserByEmail(email);
+            return existingUser != null;
         }
 
         // helper methods
 
         private string generateJwtToken(User user)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

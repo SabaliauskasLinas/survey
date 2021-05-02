@@ -1,22 +1,19 @@
 import React, { useState, useCallback, useRef, Fragment } from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { withRouter } from "react-router-dom";
 import {
 	TextField,
 	Button,
-	Checkbox,
 	Typography,
-	FormControlLabel,
 	withStyles,
 } from "@material-ui/core";
 import FormDialog from "./FormDialog";
 import LoadingSpinner from "../../helpers/LoadingSpinner";
 import VisibilityPasswordTextField from "../../helpers/VisibilityPasswordTextField";
-import { postData } from "../../../helpers/requestHelper";
+import { authenticationHelper } from "../../../helpers/authenticationHelper";
 
 const styles = (theme) => ({
-	forgotPassword: {
+	additionalAction: {
 		marginTop: theme.spacing(2),
 		color: theme.palette.primary.main,
 		cursor: "pointer",
@@ -38,12 +35,13 @@ const styles = (theme) => ({
 
 function LoginDialog(props) {
 	const {
-		history,
 		classes,
 		onClose,
-		openChangePasswordDialog,
+		showMessage,
+		//openChangePasswordDialog,
+		setDialogOpen,
 	} = props;
-	const [status, setStatus] = useState(null);
+	const [error, setError] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const loginEmail = useRef();
@@ -51,24 +49,19 @@ function LoginDialog(props) {
 
 	const login = useCallback(() => {
 		setIsLoading(true);
-		setStatus(null);
-		postData('https://localhost:44303/api/Users/Authenticate', { email: loginEmail.current.value, password: loginPassword.current.value });
-		if (loginEmail.current.value !== "test@web.com") {
-			setTimeout(() => {
-				setStatus("invalidEmail");
-				setIsLoading(false);
-			}, 1500);
-		} else if (loginPassword.current.value !== "HaRzwc") {
-			setTimeout(() => {
-				setStatus("invalidPassword");
-				setIsLoading(false);
-			}, 1500);
-		} else {
-			setTimeout(() => {
-				history.push("/c/dashboard");
-			}, 150);
-		}
-	}, [setIsLoading, loginEmail, loginPassword, history, setStatus]);
+		setError(null);
+		authenticationHelper.login(loginEmail.current.value, loginPassword.current.value)
+			.then(
+				user => {
+					onClose();
+					showMessage('Successfully logged in');
+				},
+				error => {
+					setError(error);
+					setIsLoading(false);
+				}
+			);
+	}, [setIsLoading, loginEmail, loginPassword, onClose, showMessage]);
 
 	return (
 		<Fragment>
@@ -87,7 +80,6 @@ function LoginDialog(props) {
 						<TextField
 							variant="outlined"
 							margin="normal"
-							error={status === "invalidEmail"}
 							required
 							fullWidth
 							label="Email Address"
@@ -95,45 +87,30 @@ function LoginDialog(props) {
 							autoFocus
 							autoComplete="off"
 							type="email"
-							onChange={() => {
-								if (status === "invalidEmail")
-									setStatus(null);
-							}}
-							helperText={ status === "invalidEmail" && "This email address isn't associated with an account." }
-							FormHelperTextProps={{ error: true }}
+							InputLabelProps={{ required: false }}
 						/>
 						<VisibilityPasswordTextField
 							variant="outlined"
 							margin="normal"
 							required
 							fullWidth
-							error={status === "invalidPassword"}
 							label="Password"
 							inputRef={loginPassword}
 							autoComplete="off"
-							onChange={() => {
-								if (status === "invalidPassword")
-									setStatus(null);
-							}}
-							helperText={
-								status === "invalidPassword" ? (
-									<span>
-										Incorrect password. Try again, or click on{" "}
-										<b>&quot;Forgot Password?&quot;</b> to reset it.
-									</span>
-								) : (
-									""
-								)
-							}
-							FormHelperTextProps={{ error: true }}
 							onVisibilityChange={setIsPasswordVisible}
 							isVisible={isPasswordVisible}
+							InputLabelProps={{ required: false }} 
 						/>
-						<FormControlLabel
+						{/* <FormControlLabel
 							className={classes.formControlLabel}
 							control={<Checkbox color="primary" />}
 							label={<Typography variant="body1">Remember me</Typography>}
-						/>
+						/> */}
+						{ error &&
+							<Typography color='error'>
+								{error}
+							</Typography>
+						}
 					</Fragment>
 				}
 				actions={
@@ -151,8 +128,17 @@ function LoginDialog(props) {
 						</Button>
 						<Typography
 							align="center"
+							className={classes.additionalAction}
+							onClick={() => setDialogOpen('register')}
+							tabIndex={0}
+							role="button"
+						>
+							Don't have an account yet?
+            			</Typography>
+						{/* <Typography
+							align="center"
 							className={classNames(
-								classes.forgotPassword,
+								classes.additionalAction,
 								isLoading ? classes.disabledText : null
 							)}
 							color="primary"
@@ -162,7 +148,7 @@ function LoginDialog(props) {
 							onKeyDown={() => openChangePasswordDialog()}
 						>
 							Forgot Password?
-            			</Typography>
+            			</Typography> */}
 					</Fragment>
 				}
 			/>
@@ -173,9 +159,9 @@ function LoginDialog(props) {
 LoginDialog.propTypes = {
 	classes: PropTypes.object.isRequired,
 	onClose: PropTypes.func.isRequired,
-	setStatus: PropTypes.func.isRequired,
+	showMessage: PropTypes.func.isRequired,
 	openChangePasswordDialog: PropTypes.func.isRequired,
-	history: PropTypes.object.isRequired,
+	setDialogOpen: PropTypes.func.isRequired,
 	status: PropTypes.string,
 };
 

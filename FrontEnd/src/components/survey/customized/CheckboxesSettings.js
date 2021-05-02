@@ -9,6 +9,7 @@ const CheckboxesSettings = (props) => {
 
     useEffect(() => {
         setQuestionOptions(options.filter(o => !isEmptyOrSpaces(o.name)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [options]);
 
     const handleInputCheckboxChange = (e, index) => {

@@ -17,6 +17,8 @@ namespace Repository
 
         public User GetUserByEmail(string email) => FindByCondition(s => s.Email.Equals(email)).FirstOrDefault();
 
+        public User GetUserById(int id) => FindByCondition(s => s.Id.Equals(id)).FirstOrDefault();
+
         public void CreateUser(User user) => Create(user);
 
         public void UpdateUser(User user) => Update(user);
