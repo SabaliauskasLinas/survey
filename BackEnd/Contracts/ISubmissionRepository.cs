@@ -9,6 +9,7 @@ namespace Contracts
     {
         Submission GetSubmissionById(int submissionId);
         Submission GetSubmissionWithDetails(int submissionId);
+        bool SubmissionExists(int surveyId, int userId);
         void CreateSubmission(Submission submission);
         void CreateSubmissions(IEnumerable<Submission> submissions);
         void UpdateSubmission(Submission submission);

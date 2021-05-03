@@ -1,4 +1,4 @@
-import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button } from '@material-ui/core';
+import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button, Checkbox } from '@material-ui/core';
 import { Delete, Add } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
@@ -103,6 +103,7 @@ function SurveyCreate(props) {
 	const [title, setTitle] = useState(initialTitle);
 	const [description, setDescription] = useState('');
 	const [submissionMessage, setSubmissionMessage] = useState('');
+	const [oneSubmission, setOneSubmission] = useState(false);
 	const [questions, setQuestions] = useState([{ questionTypeId: 1, required: true, key: Math.random() }]);
 	const [shouldBlockNavigation] = useState(false);
 	const [errors, setErrors] = useState([]);
@@ -182,7 +183,7 @@ function SurveyCreate(props) {
 			name: title,
 			description: description,
 			userId: currentUser.id,
-			oneSubmission: false,
+			oneSubmission: oneSubmission,
 			questions: questions,
 			submissionMessage: submissionMessage,
 		};
@@ -219,6 +220,10 @@ function SurveyCreate(props) {
 	const handleSubmissionMessageChange = (e) => {
 		setSubmissionMessage(e.target.value);
 	};
+
+	const handleOneSubmissionChange = (e) => {
+		setOneSubmission(e.target.checked);
+	}
 
 	const handleQuestionChange = index => e => {
 		let newQuestions = [...questions];
@@ -267,7 +272,7 @@ function SurveyCreate(props) {
 					<CardHeader
 						avatar={
 							<Avatar>
-								R
+								VP
 							</Avatar>
 						}
 						title="Varden Pavarden"
@@ -306,6 +311,19 @@ function SurveyCreate(props) {
 							label="Submission message"
 							margin='dense'
 						/>
+						<Box mt={1}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={oneSubmission}
+										onChange={handleOneSubmissionChange}
+										name="oneSubmissionCb"
+										color="primary"
+									/>
+								}
+								label="Limit to 1 submission"
+							/>
+						</Box>
 					</CardContent>
 				</StyledCard>
 				{questions.map((item, index) => (

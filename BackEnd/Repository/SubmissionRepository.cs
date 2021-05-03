@@ -29,6 +29,8 @@ namespace Repository
                 .FirstOrDefault();
         }
 
+        public bool SubmissionExists(int surveyId, int userId) => FindByCondition(s => s.SurveyId == surveyId && s.UserId == userId).FirstOrDefault() != null;
+
         public void CreateSubmission(Submission submission) => Create(submission);
 
         public void CreateSubmissions(IEnumerable<Submission> submissions) => CreateMultiple(submissions);

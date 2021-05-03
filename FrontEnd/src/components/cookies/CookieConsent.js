@@ -73,14 +73,14 @@ function CookieConsent(props) {
 	}, [setIsVisible]);
 
 	const onAccept = useCallback(() => {
-		Cookies.set("remember-cookie-snackbar", "", {
+		Cookies.set("cookie-consent", "", {
 			expires: 365,
 		});
 		setIsVisible(false);
 	}, [setIsVisible]);
 
 	useEffect(() => {
-		if (Cookies.get("remember-cookie-snackbar") === undefined) {
+		if (Cookies.get("cookie-consent") === undefined) {
 			openOnEuCountry();
 		}
 	}, [openOnEuCountry]);

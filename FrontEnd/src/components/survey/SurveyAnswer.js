@@ -12,6 +12,8 @@ import Checkboxes from './customized/Checkboxes';
 import LinearScale from './customized/LinearScale';
 import SurveyWrapper from './customized/SurveyWrapper';
 import SurveyAnsweredModal from './customized/SurveyAnsweredModal';
+import thumbUpGif from '../../assets/thumb-up.gif'
+import Cookies from 'js-cookie';
 
 const AnswerControl = props => {
     const { question, error, changeAnswers } = props;
@@ -90,18 +92,43 @@ const SurveyAnswer = props => {
     const [errors, setErrors] = useState([]);
     const [shouldBlockNavigation] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [alreadyAnswered, setAlreadyAnswered] = useState(false);
 
     useEffect(() => {
         selectSurveyAnswer();
         getData(`Survey/GetSurveyWithOptions/${id}`)
             .then(res => {
-                setSurvey(res);
-                setQuestions(res.questions);
+                if(res.oneSubmission) {
+                    if(currentUser) {
+                        getData(`Submission/SubmissionExists`, { surveyId: id, userId: currentUser.id })
+                            .then(exists => {
+                                setAlreadyAnswered(exists);
+                                setSurvey(res);
+                                setQuestions(res.questions);
+                            })
+                            .catch(er => {
+                                console.log(er);
+                                setAlreadyAnswered(false);
+                                setSurvey(res);
+                                setQuestions(res.questions);
+                            })
+                    }
+                    else {
+                        var submissions = Cookies.getJSON('submissions');
+                        setAlreadyAnswered(submissions ? submissions.includes(parseInt(id)) : false);
+                        setSurvey(res);
+                        setQuestions(res.questions);
+                    }
+                }
+                else {
+                    setSurvey(res);
+                    setQuestions(res.questions);
+                }
             })
             .catch(er => {
                 console.log(er)
             });
-    }, [selectSurveyAnswer, id]);
+    }, [selectSurveyAnswer, id, currentUser]);
 
     const validateSurvey = () => {
         let newErrors = [];
@@ -112,6 +139,16 @@ const SurveyAnswer = props => {
 
         setErrors(newErrors);
         return newErrors;
+    }
+
+    const setSubmissionCookie = () => {
+        let submissionsJson = Cookies.get('submissions');
+        let submissions = submissionsJson ? JSON.parse(submissionsJson) : [];
+        submissions.push(survey.id);
+        submissionsJson = JSON.stringify(submissions);
+        Cookies.set('submissions', submissionsJson, {
+			expires: 365,
+		});
     }
 
     //#region handlers
@@ -145,7 +182,7 @@ const SurveyAnswer = props => {
         let submission = {
             surveyId: survey.id,
             answers: answers,
-            userId: currentUser.id,
+            userId: currentUser ? currentUser.id : null,
         }
 
         postData('Submission', submission)
@@ -153,6 +190,8 @@ const SurveyAnswer = props => {
                 if (res && res.id) {
                     snackbarShowMessage('Submission successful');
                     setDialogOpen(true);
+                    if(!currentUser && survey.oneSubmission)
+                        setSubmissionCookie();
                 }
                 else
                     snackbarShowMessage('Something went wrong', 'error');
@@ -177,6 +216,24 @@ const SurveyAnswer = props => {
         if (shouldBlockNavigation)
             window.onbeforeunload = () => true
     })
+
+    if (alreadyAnswered)
+        return (
+            <SurveyWrapper>
+                <Box display="flex" justifyContent="center" className="row">
+                    <StyledCard>
+                        <CardContent>
+                            <Typography variant="h5" align='center'>
+                                Survey already answered. Thank you for your participation.
+                            </Typography>
+                            <Box display="flex" justifyContent="center" className="row">
+                                <img src={thumbUpGif} alt="thumbs-up" style={{width: '200px'}}/>
+                            </Box>
+                        </CardContent>
+                    </StyledCard>
+                </Box>
+            </SurveyWrapper>
+        )
 
     return (
         <SurveyWrapper>
@@ -229,6 +286,7 @@ const SurveyAnswer = props => {
                 handleDialogClose={handleDialogClose}
                 handleSubmitAnotherClick={handleSubmitAnotherClick}
                 submissionMessage={survey.submissionMessage}
+                oneSubmission={survey.oneSubmission}
 			/>
         </SurveyWrapper>
     );

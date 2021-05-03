@@ -40,6 +40,14 @@ namespace iWonder.Controllers
             }
         }
 
+
+        [Authorize]
+        [HttpGet("SubmissionExists")]
+        public IActionResult SubmissionExists(int surveyId, int userId)
+        {
+            return Ok(_repository.Submission.SubmissionExists(surveyId, userId));
+        }
+
         [HttpPost]
         public IActionResult CreateSubmission([FromBody] SubmissionCreationDto submission)
         {

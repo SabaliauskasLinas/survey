@@ -23,7 +23,6 @@ namespace iWonder.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpGet("GetSurveyWithOptions/{id}", Name = "SurveyById")]
         public IActionResult GetSurveyById(int id)
         {
