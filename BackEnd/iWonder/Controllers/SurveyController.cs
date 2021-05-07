@@ -76,6 +76,24 @@ namespace iWonder.Controllers
             return Ok(surveysResult);
         }
 
+        [HttpGet("GetUserSurveys/{userId}")]
+        public IActionResult GetUserSurveys(int userId)
+        {
+            var surveys = _repository.Survey.GetUserSurveys(userId);
+            _logger.LogInfo("Returned all most recent surveys.");
+            var surveysResult = _mapper.Map<IEnumerable<SurveyDto>>(surveys);
+            return Ok(surveysResult);
+        }
+
+        [HttpGet("GetUserAnsweredSurveys/{userId}")]
+        public IActionResult GetUserAnsweredSurveys(int userId)
+        {
+            var surveys = _repository.Survey.GetUserAnsweredSurveys(userId);
+            _logger.LogInfo("Returned all most recent surveys.");
+            var surveysResult = _mapper.Map<IEnumerable<SurveyDto>>(surveys);
+            return Ok(surveysResult);
+        }
+
         [Authorize]
         [HttpPost]
         public IActionResult CreateSurvey([FromBody] SurveyCreationDto survey)

@@ -62,10 +62,18 @@ function RegisterDialog(props) {
 			setHasTermsOfServiceError(true);
 			return;
 		}
+
+		if (registerPassword.current.value.length < 6) {
+			setStatus("passwordTooShort");
+			return;
+		}
+
+
 		if (registerPassword.current.value !== registerPasswordRepeat.current.value) {
 			setStatus("passwordsDontMatch");
 			return;
 		}
+
 		setStatus(null);
 		postData('Users/Register', { 
 			email: email,

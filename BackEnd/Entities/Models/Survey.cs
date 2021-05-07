@@ -30,5 +30,7 @@ namespace Entities.Models
 
         [Required(ErrorMessage = "Questions are required")]
         public ICollection<Question> Questions { get; set; }
+
+        public ICollection<Submission> Submissions { get; set; }
     }
 }

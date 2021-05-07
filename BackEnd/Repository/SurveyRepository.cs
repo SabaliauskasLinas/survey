@@ -31,6 +31,23 @@ namespace Repository
                 .ToList();
         }
 
+        public IEnumerable<Survey> GetUserSurveys(int userId)
+        {
+            return FindByCondition(s => s.UserId.Equals(userId))
+                .OrderByDescending(o => o.CreatedAt)
+                .ToList();
+        }
+
+        public IEnumerable<Survey> GetUserAnsweredSurveys(int userId)
+        {
+            return FindAll()
+                .Include(s => s.Submissions)
+                .Where(s => s.Submissions.Any(sub => sub.UserId == userId))
+                .OrderByDescending(o => o.Submissions.FirstOrDefault(sub => sub.UserId == userId).CreatedAt)
+                .Take(10)
+                .ToList();
+        }
+
         public Survey GetSurveyById(int surveyId)
         {
             return FindByCondition(s => s.Id.Equals(surveyId))

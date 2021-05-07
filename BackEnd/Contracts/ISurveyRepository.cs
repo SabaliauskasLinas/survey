@@ -9,6 +9,8 @@ namespace Contracts
     {
         IEnumerable<Survey> GetMostPopularSurveys();
         IEnumerable<Survey> GetMostRecentSurveys();
+        IEnumerable<Survey> GetUserSurveys(int userId);
+        IEnumerable<Survey> GetUserAnsweredSurveys(int userId);
         Survey GetSurveyById(int surveyId);
         Survey GetSurveyWithOptions(int surveyId);
         Survey GetSurveyWithAnswers(int surveyId);

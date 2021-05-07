@@ -25,5 +25,7 @@ namespace Entities.DTO
         public int UserId { get; set; }
 
         public ICollection<QuestionDto> Questions { get; set; }
+
+        public ICollection<SubmissionDto> Submissions { get; set; }
     }
 }

@@ -53,6 +53,11 @@ function Main(props) {
 		document.title = "iWonder - Survey Results";
 	};
 
+	const selectUserActivity = () => {
+		smoothScrollTop();
+		document.title = "iWonder - User Activity";
+	};
+
 	const handleMobileDrawerOpen = useCallback(() => {
 		setIsMobileDrawerOpen(true);
 	}, [setIsMobileDrawerOpen]);
@@ -129,6 +134,7 @@ function Main(props) {
 				selectSurveyCreate={selectSurveyCreate}
 				selectSurveyAnswer={selectSurveyAnswer}
 				selectSurveyResults={selectSurveyResults}
+				selectUserActivity={selectUserActivity}
 			/>
 		</div>
 	);

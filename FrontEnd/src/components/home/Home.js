@@ -134,7 +134,7 @@ function Home(props) {
                         <Typography
                           variant={isWidthUp("lg", width) ? "h3" : "h4"}
                         >
-                          Labas rytas suraitytas
+                          Turn questions into answers.
                         </Typography>
                       </Box>
                       <div>
@@ -143,8 +143,8 @@ function Home(props) {
                             variant={isWidthUp("lg", width) ? "h6" : "body1"}
                             color="textSecondary"
                           >
-                            Lorem ipsum dolor sit amet, consetetur sadipscing
-                            elitr, sed diam nonumy eirmod tempor invidunt
+                            iWonder can help you to understand people better. Find out more about opinions, interests and the reasons behind decisions.
+                            And all without much work on your part – thanks to our intuitive solutions for online surveys.
                           </Typography>
                         </Box>
                         <Button

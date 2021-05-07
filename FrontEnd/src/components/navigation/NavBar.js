@@ -118,12 +118,12 @@ function NavBar(props) {
 	const accountMenuItems = [
 		{
 			name: 'Activity',
-			onClick: handleMenuClose,
+			onClick: () => history.push('/profile/activity'),
 			icon: <List />,
 		},
 		{
 			name: 'Settings',
-			onClick: handleMenuClose,
+			onClick: () => history.push('/profile/settings'),
 			icon: <Settings />,
 		},
 		{

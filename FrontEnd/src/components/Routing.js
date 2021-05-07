@@ -8,9 +8,19 @@ import SurveyCreate from "./survey/SurveyCreate";
 import SurveyAnswer from "./survey/SurveyAnswer";
 import SurveyResults from "./survey/SurveyResults";
 import { authenticationHelper } from "../helpers/authenticationHelper";
+import UserActivity from "./user/UserActivity";
 
 function Routing(props) {
-	const { selectSurveys, selectSurveyCreate, selectSurveyAnswer, selectSurveyResults, selectHome, setDialogOpen } = props;
+	const { 
+		selectSurveys,
+		selectSurveyCreate,
+		selectSurveyAnswer,
+		selectSurveyResults,
+		selectHome,
+		setDialogOpen,
+		selectUserActivity
+	} = props;
+
 	const[ currentUser, setCurrentUser ] = useState(null);
 
 	useEffect(() => {
@@ -45,6 +55,15 @@ function Routing(props) {
 					path="/survey/results/:id"
 					component={SurveyResults}
 					selectSurveyResults={selectSurveyResults}
+					currentUser={currentUser}
+				/>
+			}
+			{ currentUser &&
+				<PropsRoute
+					path="/profile/activity/"
+					component={UserActivity}
+					selectUserActivity={selectUserActivity}
+					currentUser={currentUser}
 				/>
 			}
 			<PropsRoute 
@@ -64,6 +83,7 @@ Routing.propTypes = {
 	selectSurveys: PropTypes.func.isRequired,
 	selectSurveyCreate: PropTypes.func.isRequired,
 	selectSurveyAnswer: PropTypes.func.isRequired,
+	selectUserActivity: PropTypes.func.isRequired,
 };
 
 export default memo(Routing);

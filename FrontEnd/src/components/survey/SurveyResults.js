@@ -1,6 +1,6 @@
 import { Box, CardContent, withStyles, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import questionTypes from '../../enums/questionTypes';
 import { groupBy } from '../../helpers/groupByHelper';
 import { getData } from '../../helpers/requestHelper';
@@ -54,18 +54,26 @@ const DataControl = props => {
 }
 
 const SurveyResults = (props) => {
-    const { classes, selectSurveyResults } = props;
+    const { classes, selectSurveyResults, currentUser } = props;
     const [survey, setSurvey] = useState({});
     const { id } = useParams();
+    var history = useHistory();
 
     useEffect(() => {
         selectSurveyResults();
         getData(`Survey/GetSurveyWithAnswers/${id}`)
-            .then(res => setSurvey(res))
+            .then(res => {
+                if (currentUser.id !== res.userId) {
+                    history.push('/');
+                    return;
+                }
+
+                setSurvey(res)
+            })
             .catch(er => {
                 console.log(er)
             });
-    }, [selectSurveyResults, id]);
+    }, [selectSurveyResults, id, currentUser, history]);
 
     return (
         <SurveyWrapper>

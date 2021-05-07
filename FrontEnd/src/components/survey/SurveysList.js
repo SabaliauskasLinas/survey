@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Badge, Card, CardHeader, Divider, Fab, List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@material-ui/core";
+import { Badge, Box, Card, CardHeader, Divider, Fab, List, ListItem, ListItemText, Tooltip, Typography } from "@material-ui/core";
 import { BarChart } from "@material-ui/icons";
 import { getData } from '../../helpers/requestHelper';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../helpers/LoadingSpinner';
 
 function SurveysList(props) {
-	const { title, type } = props;
+	const { title, type, currentUser } = props;
 	const [surveys, setSurveys] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		let endpoint = '';
+		let userId = '';
 		switch (type) {
 			case 'popular':
 				endpoint = 'GetMostPopularSurveys';
@@ -19,12 +20,22 @@ function SurveysList(props) {
 			case 'recent':
 				endpoint = 'GetMostRecentSurveys';
 				break;
+			case 'my': {
+				endpoint = 'GetUserSurveys';
+				userId = currentUser.id;
+				break;
+			}
+			case 'answered': {
+				endpoint = 'GetUserAnsweredSurveys';
+				userId = currentUser.id;
+				break;
+			}
 			default:
 				console.log('Survey type not handled');
 		}
 
 		if (endpoint) {
-			getData(`Survey/${endpoint}`)
+			getData(`Survey/${endpoint}/${userId}`)
 				.then(res => {
 					setSurveys(res);
 					setLoading(false);
@@ -34,7 +45,7 @@ function SurveysList(props) {
 					setLoading(false);
 				});
 		}
-	}, [type]);
+	}, [type, currentUser]);
 
 	return (
 		<Card>
@@ -51,43 +62,49 @@ function SurveysList(props) {
 				{ !loading && surveys && surveys.map((item, index) => (
 					<div key={`survey-${index}`}>
 						<Divider variant="middle" />
-						<ListItem button component={Link} to={`/survey/answer/${item.id}`}>
-							{/* <ListItemIcon>
-								<Tooltip title="Total answers">
-									<Badge badgeContent={item.totalAnswers} color="secondary" showZero max={999}>
-										<CheckCircle />
-									</Badge>
-								</Tooltip>
-							</ListItemIcon> */}
-							<ListItemIcon>
-								<Link to={`/survey/results/${item.id}`}>
-									<Tooltip title="Results">
-										<Badge badgeContent={item.totalAnswers} color="primary" showZero max={999}>
-											<Fab size='small' color='primary'>
-												<BarChart />
+						<Box display='flex' alignItems="center" ml={2}>
+							<Box>
+								{ type === 'my' && currentUser && item.userId === currentUser.id 
+									?
+										<Link to={`/survey/results/${item.id}`}>
+											<Tooltip title="View results">
+												<Badge badgeContent={item.totalAnswers} color="primary" showZero max={999}>
+													<Fab size='small' color='primary'>
+														<BarChart />
+													</Fab>
+												</Badge>
+											</Tooltip>
+										</Link>
+									:
+										<Tooltip title="Submissions">
+											<Fab size='small' color='primary' style={{cursor: 'default'}}>
+												<Box fontWeight="fontWeightBold">
+													{item.totalAnswers}
+												</Box>
 											</Fab>
-										</Badge>
-									</Tooltip>
-								</Link>
-							</ListItemIcon>
-							<ListItemText
-								primaryTypographyProps={{ noWrap: true, variant: 'h6' }}
-								primary={item.name}
-								secondary={
-									<React.Fragment>
-										<Typography
-											component="span"
-											variant="body2"
-											color="textSecondary"
-											noWrap
-											display="block"
-										>
-											{item.description}
-										</Typography>
-										{new Date(item.createdAt).toLocaleString()}
-									</React.Fragment>
-								} />
-						</ListItem>
+										</Tooltip>
+								}
+							</Box>
+							<ListItem button component={Link} to={`/survey/answer/${item.id}`} style={{width: '90%'}}>
+								<ListItemText
+									primaryTypographyProps={{ noWrap: true, variant: 'h6' }}
+									primary={item.name}
+									secondary={
+										<React.Fragment>
+											<Typography
+												component="span"
+												variant="body2"
+												color="textSecondary"
+												noWrap
+												display="block"
+											>
+												{item.description}
+											</Typography>
+											{new Date(item.createdAt).toLocaleString()}
+										</React.Fragment>
+									} />
+							</ListItem>
+						</Box>
 					</div>))
 				}
 			</List>
