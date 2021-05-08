@@ -27,25 +27,30 @@ export async function getDataPromise(endpoint, params = {}, additionalHeaders = 
     return handleResponse(response);
 }
 
-export async function postData(endpoint, params = {}, additionalHeaders = []) {
+export async function postData(endpoint, params = {}, additionalHeaders = [], stringify = true) {
     let authHeader = getAuthHeader();
     if (authHeader)
         additionalHeaders.push(authHeader);
 
-    const promise = await postDataPromise(endpoint,params,additionalHeaders);
+    const promise = await postDataPromise(endpoint,params,additionalHeaders, stringify);
     return promise;
 }
 
-export async function postDataPromise(endpoint, params = {}, additionalHeaders = []) {
+export async function postDataPromise(endpoint, params = {}, additionalHeaders = [], stringify = true) {
     let headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
     if (additionalHeaders && additionalHeaders.length > 0)
-        additionalHeaders.forEach(addH => headers[addH.key] = addH.value);
+        additionalHeaders.forEach(addH => {
+            if (!addH.value)
+                delete headers[addH.key];
+            else
+                headers[addH.key] = addH.value;
+        });
     
     const response = await fetch(process.env.REACT_APP_SERVER_URL + endpoint, {
         mode: 'cors',
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(params)
+        body: stringify ? JSON.stringify(params) : params,
     })
 
     return handleResponse(response);

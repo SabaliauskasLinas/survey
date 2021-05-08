@@ -57,6 +57,7 @@ namespace Repository
         public Survey GetSurveyWithOptions(int surveyId)
         {
             return FindByCondition(s => s.Id.Equals(surveyId))
+                .Include(u => u.User)
                 .Include(q => q.Questions).ThenInclude(o => o.Options)
                 .FirstOrDefault();
         }

@@ -1,5 +1,6 @@
 ﻿using Entities.Models;
 using iWonder.Models;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace iWonder.Services
@@ -7,9 +8,9 @@ namespace iWonder.Services
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        RegistrationResponse Register(RegistrationRequest model);
+        ServerResult Register(RegistrationRequest model);
+        ServerResult<byte[]> UploadAvatar(int userId, IFormFile file);
         bool EmailExists(string email);
-        IEnumerable<User> GetAll();
         User GetById(int id);
     }
 }

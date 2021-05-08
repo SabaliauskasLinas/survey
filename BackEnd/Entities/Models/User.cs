@@ -20,6 +20,8 @@ namespace Entities.Models
 
         public string Email { get; set; }
 
+        public byte[] Avatar { get; set; }
+
         [JsonIgnore]
         public byte[] PasswordHash { get; set; }
 

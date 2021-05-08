@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using System;
 
 namespace iWonder.Models
 {
@@ -8,6 +9,7 @@ namespace iWonder.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public byte[] Avatar { get; set; }
         public string Token { get; set; }
 
 
@@ -18,6 +20,7 @@ namespace iWonder.Models
             LastName = user.LastName;
             Email = user.Email;
             Token = token;
+            Avatar = user.Avatar;
         }
     }
 }

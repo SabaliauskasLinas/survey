@@ -5,9 +5,14 @@ using System.Threading.Tasks;
 
 namespace iWonder.Models
 {
-    public class RegistrationResponse
+    public class ServerResult
     {
         public bool Success { get; set; }
         public string ErrorMessage { get; set; }
+    }
+
+    public class ServerResult<T> : ServerResult
+    {
+        public T Data { get; set; }
     }
 }

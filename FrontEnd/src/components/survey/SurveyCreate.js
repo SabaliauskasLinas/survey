@@ -1,6 +1,6 @@
 import { Box, CardContent, withStyles, withWidth, TextField, Select, MenuItem, ListItemIcon, CardHeader, Avatar, CardActions, FormControlLabel, Switch, Divider, IconButton, Grid, Button, Checkbox } from '@material-ui/core';
 import { Delete, Add } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
 import { withSnackbar } from '../../helpers/notificationHelper';
 import { postData } from '../../helpers/requestHelper';
@@ -271,12 +271,16 @@ function SurveyCreate(props) {
 				<StyledCard>
 					<CardHeader
 						avatar={
-							<Avatar>
-								VP
-							</Avatar>
+							<Fragment>
+								{ currentUser.avatar
+									? <Avatar style={{width: '100px', height: '100px' }} src={'data:image/jpeg;base64,' + currentUser.avatar} />
+									: <Avatar style={{width: '100px', height: '100px' }}> {currentUser.firstName[0]}{currentUser.lastName[0]} </Avatar>
+								}
+							</Fragment>
 						}
-						title="Varden Pavarden"
-						subheader="Varden description"
+						title={`${currentUser.firstName} ${currentUser.lastName}`}
+						subheader={currentUser.description}
+						titleTypographyProps={{ variant: 'h5' }}
 					/>
 					<CardContent>
 						<TextField

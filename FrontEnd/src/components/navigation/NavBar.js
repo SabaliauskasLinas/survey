@@ -13,7 +13,8 @@ import {
 	Menu,
 	MenuItem,
 	ListItemIcon,
-	ListItemText, 
+	ListItemText,
+	Avatar, 
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
@@ -192,49 +193,54 @@ function NavBar(props) {
 							</IconButton>
 						</Hidden>
 						<Hidden smDown>
-							{getMenuItems().map(element => {
-								if (element.link) {
-									return (
-										<Link
-											key={element.name}
-											to={element.link}
-											className={classes.noDecoration}
-											onClick={handleMobileDrawerClose}
-										>
-											<Button
-												color="secondary"
-												size="large"
-												classes={{ text: classes.menuButtonText }}
+							<Box display='flex' alignItems='center'>
+								{getMenuItems().map(element => {
+									if (element.link) {
+										return (
+											<Link
+												key={element.name}
+												to={element.link}
+												className={classes.noDecoration}
+												onClick={handleMobileDrawerClose}
 											>
-												{element.name}
-											</Button>
-										</Link>
-									);
-								}
-								else if(element.iconButton) {
-									return (
-										<IconButton
+												<Button
+													color="secondary"
+													size="large"
+													classes={{ text: classes.menuButtonText }}
+												>
+													{element.name}
+												</Button>
+											</Link>
+										);
+									}
+									else if(element.iconButton) {
+										return (
+											<IconButton
 											edge="end"
 											onClick={element.onClick}
 											color="inherit"
 											key={element.name}
 										>
-											{element.icon}
+											{ currentUser && currentUser.avatar 
+												? <Avatar src={'data:image/jpeg;base64,' + currentUser.avatar} />
+												: element.icon
+											}
 										</IconButton>
-									)
-								}
-								return (
-									<Button
-										color="secondary"
-										size="large"
-										onClick={element.onClick}
-										classes={{ text: classes.menuButtonText }}
-										key={element.name}
-									>
-										{element.name}
-									</Button>
-								);
-							})}
+										)
+									}
+									return (
+										<Button
+											color="secondary"
+											size="large"
+											onClick={element.onClick}
+											classes={{ text: classes.menuButtonText }}
+											key={element.name}
+										>
+											{element.name}
+										</Button>
+									);
+								})}
+							</Box>
 						</Hidden>
 					</div>
 				</Toolbar>
@@ -246,24 +252,33 @@ function NavBar(props) {
 				selectedItem={selectedTab}
 				onClose={handleMobileDrawerClose}
 			/>
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-				getContentAnchorEl={null}
-				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				open={isMenuOpen}
-				onClose={handleMenuClose}
-				style={{ zIndex: 1600, marginTop: '1rem'}}
-			>
-				{ accountMenuItems.map((item, index) => (
-					<MenuItem key={`menu-item-${item.name}`} onClick={item.onClick}>
-						<ListItemIcon>
-							{item.icon}
-						</ListItemIcon>
-						<ListItemText primary={item.name} />
-					</MenuItem>))
-				}
-			</Menu>
+			{ currentUser &&
+				<Menu
+					anchorEl={anchorEl}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+					getContentAnchorEl={null}
+					transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+					open={isMenuOpen}
+					onClose={handleMenuClose}
+					style={{ zIndex: 1600, marginTop: '1rem'}}
+				>
+					<Box mx={2}>
+						<Typography component="div">
+							<Box fontWeight="fontWeightBold">
+								{currentUser.firstName} {currentUser.lastName}
+							</Box>
+						</Typography>
+					</Box>
+					{ accountMenuItems.map((item, index) => (
+						<MenuItem key={`menu-item-${item.name}`} onClick={item.onClick}>
+							<ListItemIcon>
+								{item.icon}
+							</ListItemIcon>
+							<ListItemText primary={item.name} />
+						</MenuItem>))
+					}
+				</Menu>
+			}
 		</div>
 	);
 }

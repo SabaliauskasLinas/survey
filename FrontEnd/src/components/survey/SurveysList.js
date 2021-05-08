@@ -7,7 +7,7 @@ import LoadingSpinner from '../helpers/LoadingSpinner';
 
 function SurveysList(props) {
 	const { title, type, currentUser } = props;
-	const [surveys, setSurveys] = useState([]);
+	const [surveys, setSurveys] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -54,9 +54,14 @@ function SurveysList(props) {
 			/>
 			<List component="nav" aria-label="main mailbox folders">
 				{ loading && <LoadingSpinner /> }
-				{ !loading && (!surveys || surveys.length === 0) &&
+				{ !loading && !surveys &&
 					<Typography variant="h5" align={'center'}>
 						Could not load data
+					</Typography>
+				}
+				{ !loading && surveys && surveys.length === 0 &&
+					<Typography variant="h5" align={'center'}>
+						No records found
 					</Typography>
 				}
 				{ !loading && surveys && surveys.map((item, index) => (

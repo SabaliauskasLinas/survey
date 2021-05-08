@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Box, Button, CardContent, CardHeader, TextField, Typography } from '@material-ui/core';
 import { withSnackbar } from '../../helpers/notificationHelper';
@@ -89,6 +89,7 @@ const SurveyAnswer = props => {
     const { id } = useParams();
     const [survey, setSurvey] = useState({});
     const [questions, setQuestions] = useState([]);
+    const [user, setUser] = useState({});
     const [errors, setErrors] = useState([]);
     const [shouldBlockNavigation] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -98,6 +99,7 @@ const SurveyAnswer = props => {
         selectSurveyAnswer();
         getData(`Survey/GetSurveyWithOptions/${id}`)
             .then(res => {
+                console.log(res);
                 if(res.oneSubmission) {
                     if(currentUser) {
                         getData(`Submission/SubmissionExists`, { surveyId: id, userId: currentUser.id })
@@ -105,12 +107,14 @@ const SurveyAnswer = props => {
                                 setAlreadyAnswered(exists);
                                 setSurvey(res);
                                 setQuestions(res.questions);
+                                setUser(res.user);
                             })
                             .catch(er => {
                                 console.log(er);
                                 setAlreadyAnswered(false);
                                 setSurvey(res);
                                 setQuestions(res.questions);
+                                setUser(res.user);
                             })
                     }
                     else {
@@ -118,11 +122,13 @@ const SurveyAnswer = props => {
                         setAlreadyAnswered(submissions ? submissions.includes(parseInt(id)) : false);
                         setSurvey(res);
                         setQuestions(res.questions);
+                        setUser(res.user);
                     }
                 }
                 else {
                     setSurvey(res);
                     setQuestions(res.questions);
+                    setUser(res.user);
                 }
             })
             .catch(er => {
@@ -241,12 +247,19 @@ const SurveyAnswer = props => {
                 <StyledCard>
                     <CardHeader
                         avatar={
-                            <Avatar>
-                                R
-                            </Avatar>
+							<Fragment>
+								{ user 
+                                    ?   ( user.avatar
+                                            ? <Avatar style={{width: '100px', height: '100px' }} src={'data:image/jpeg;base64,' + user.avatar} />
+                                            : <Avatar style={{width: '100px', height: '100px' }}> {user.firstName && user.firstName[0]}{user.lastName && user.lastName[0]} </Avatar>
+                                        ) 
+                                    : <div></div>
+								}
+							</Fragment>
                         }
-                        title="Varden Pavarden"
-                        subheader="Varden description"
+						title={`${user.firstName} ${user.lastName}`}
+						subheader={user.description}
+						titleTypographyProps={{ variant: 'h5' }}
                     />
                     <CardContent>
                         <Typography variant="h4">

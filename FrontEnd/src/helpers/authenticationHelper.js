@@ -13,9 +13,7 @@ export const authenticationHelper = {
 export function login(email, password) {
     return postData('Users/Authenticate', { email, password })
         .then(user => {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            currentUserSubject.next(user);
-
+            updateUser(user);
             return user;
         });
 }
@@ -23,4 +21,10 @@ export function login(email, password) {
 export function logout() {
     localStorage.removeItem('currentUser');
     currentUserSubject.next(null);
+}
+
+export function updateUser(user) {
+    let stringifiedUser = JSON.stringify(user);
+    localStorage.setItem('currentUser', stringifiedUser);
+    currentUserSubject.next(JSON.parse(stringifiedUser));
 }

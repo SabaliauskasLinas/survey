@@ -1,6 +1,7 @@
 ﻿using iWonder.Helpers;
 using iWonder.Models;
 using iWonder.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -49,11 +50,14 @@ namespace iWonder.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpPost("UploadAvatar/{userId}")]
+        public IActionResult UploadAvatar(int userId, IFormFile file)
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            var result = _userService.UploadAvatar(userId, file);
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(result);
         }
     }
 }

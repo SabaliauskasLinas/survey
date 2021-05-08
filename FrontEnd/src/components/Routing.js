@@ -9,6 +9,7 @@ import SurveyAnswer from "./survey/SurveyAnswer";
 import SurveyResults from "./survey/SurveyResults";
 import { authenticationHelper } from "../helpers/authenticationHelper";
 import UserActivity from "./user/UserActivity";
+import UserSettings from "./user/UserSettings";
 
 function Routing(props) {
 	const { 
@@ -18,7 +19,8 @@ function Routing(props) {
 		selectSurveyResults,
 		selectHome,
 		setDialogOpen,
-		selectUserActivity
+		selectUserActivity,
+		selectUserSettings,
 	} = props;
 
 	const[ currentUser, setCurrentUser ] = useState(null);
@@ -66,6 +68,14 @@ function Routing(props) {
 					currentUser={currentUser}
 				/>
 			}
+			{ currentUser &&
+				<PropsRoute
+					path="/profile/settings/"
+					component={UserSettings}
+					selectUserSettings={selectUserSettings}
+					currentUser={currentUser}
+				/>
+			}
 			<PropsRoute 
 				path="/"
 				component={Home}
@@ -84,6 +94,7 @@ Routing.propTypes = {
 	selectSurveyCreate: PropTypes.func.isRequired,
 	selectSurveyAnswer: PropTypes.func.isRequired,
 	selectUserActivity: PropTypes.func.isRequired,
+	selectUserSettings: PropTypes.func.isRequired,
 };
 
 export default memo(Routing);
