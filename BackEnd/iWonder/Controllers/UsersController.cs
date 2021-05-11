@@ -1,4 +1,5 @@
-﻿using iWonder.Helpers;
+﻿using Entities.DTO;
+using iWonder.Helpers;
 using iWonder.Models;
 using iWonder.Services;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,24 @@ namespace iWonder.Controllers
                 return BadRequest(new { message = result.ErrorMessage });
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("SavePersonalInfo")]
+        public IActionResult SavePersonalInfo(UserPersonalInfo args)
+        {
+            var result = _userService.SavePersonalInfo(args);
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(ChangePasswordArgs args)
+        {
+            return Ok(_userService.ChangePassword(args));
         }
     }
 }

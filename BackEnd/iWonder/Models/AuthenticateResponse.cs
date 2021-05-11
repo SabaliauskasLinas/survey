@@ -9,6 +9,7 @@ namespace iWonder.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string Description { get; set; }
         public byte[] Avatar { get; set; }
         public string Token { get; set; }
 
@@ -19,6 +20,7 @@ namespace iWonder.Models
             FirstName = user.FirstName;
             LastName = user.LastName;
             Email = user.Email;
+            Description = user.Description;
             Token = token;
             Avatar = user.Avatar;
         }

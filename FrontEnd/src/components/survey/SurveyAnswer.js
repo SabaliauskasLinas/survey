@@ -14,6 +14,7 @@ import SurveyWrapper from './customized/SurveyWrapper';
 import SurveyAnsweredModal from './customized/SurveyAnsweredModal';
 import thumbUpGif from '../../assets/thumb-up.gif'
 import Cookies from 'js-cookie';
+import LoadingSpinner from '../helpers/LoadingSpinner';
 
 const AnswerControl = props => {
     const { question, error, changeAnswers } = props;
@@ -94,12 +95,12 @@ const SurveyAnswer = props => {
     const [shouldBlockNavigation] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [alreadyAnswered, setAlreadyAnswered] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         selectSurveyAnswer();
         getData(`Survey/GetSurveyWithOptions/${id}`)
             .then(res => {
-                console.log(res);
                 if(res.oneSubmission) {
                     if(currentUser) {
                         getData(`Submission/SubmissionExists`, { surveyId: id, userId: currentUser.id })
@@ -108,6 +109,7 @@ const SurveyAnswer = props => {
                                 setSurvey(res);
                                 setQuestions(res.questions);
                                 setUser(res.user);
+                                setLoading(false);
                             })
                             .catch(er => {
                                 console.log(er);
@@ -115,6 +117,7 @@ const SurveyAnswer = props => {
                                 setSurvey(res);
                                 setQuestions(res.questions);
                                 setUser(res.user);
+                                setLoading(false);
                             })
                     }
                     else {
@@ -123,12 +126,14 @@ const SurveyAnswer = props => {
                         setSurvey(res);
                         setQuestions(res.questions);
                         setUser(res.user);
+                        setLoading(false);
                     }
                 }
                 else {
                     setSurvey(res);
                     setQuestions(res.questions);
                     setUser(res.user);
+                    setLoading(false);
                 }
             })
             .catch(er => {
@@ -222,6 +227,9 @@ const SurveyAnswer = props => {
         if (shouldBlockNavigation)
             window.onbeforeunload = () => true
     })
+
+    if (loading)
+        return <LoadingSpinner />
 
     if (alreadyAnswered)
         return (

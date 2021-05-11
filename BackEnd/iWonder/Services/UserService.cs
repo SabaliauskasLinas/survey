@@ -1,4 +1,6 @@
 ﻿using Contracts;
+using Entities.DTO;
+using Entities.Enums;
 using Entities.Models;
 using iWonder.Helpers;
 using iWonder.Models;
@@ -88,6 +90,41 @@ namespace iWonder.Services
             {
                 return new ServerResult<byte[]> { ErrorMessage = ex.Message };
             }
+        }
+
+        public ServerResult SavePersonalInfo(UserPersonalInfo args)
+        {
+            var user = GetById(args.UserId);
+
+            user.FirstName = args.FirstName;
+            user.LastName = args.LastName;
+            user.Description = args.Description;
+
+            _repository.User.UpdateUser(user);
+            _repository.Save();
+
+            return new ServerResult { Success = true };
+        }
+
+        public ServerResult ChangePassword(ChangePasswordArgs args)
+        {
+            var user = GetById(args.UserId);
+
+            if (args.NewPassword.Length < 6)
+                return new ServerResult { ErrorMessage = "New password too short", Code = (int)ChangePasswordErrors.NewPasswordTooShort };
+
+            var saltedHash = SecurityHelper.GenerateSaltedHash(Encoding.UTF8.GetBytes(args.CurrentPassword), user.PasswordSalt);
+            if (!SecurityHelper.CompareByteArrays(user.PasswordHash, saltedHash))
+                return new ServerResult { ErrorMessage = "Wrong password", Code = (int)ChangePasswordErrors.WrongPassword };
+
+            var newSalt = SecurityHelper.GetSalt();
+            user.PasswordHash = SecurityHelper.GenerateSaltedHash(Encoding.UTF8.GetBytes(args.NewPassword), newSalt);
+            user.PasswordSalt = newSalt;
+
+            _repository.User.UpdateUser(user);
+            _repository.Save();
+
+            return new ServerResult { Success = true };
         }
 
         public User GetById(int id)
