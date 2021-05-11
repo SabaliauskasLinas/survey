@@ -126,6 +126,7 @@ const UserSettings = (props) => {
                             <TextField
                                 value={description}
                                 fullWidth
+                                multiline
                                 color='primary'
                                 label="Description"
                                 margin='normal'
