@@ -82,9 +82,26 @@ function RegisterDialog(props) {
 			password: registerPassword.current.value 
 		})
 		.then(res => {
-			showMessage('Registration successful, please log in');
+			if (res.success) {
+				showMessage('Registration successful, please log in');
+				setDialogOpen('login');
+			}
+			else {
+				switch(res.code) {
+					case 0:
+						setStatus('invalidFirstName');
+						break;
+					case 1:
+						setStatus('invalidLastName');
+						break;
+					case 2:
+						setStatus('emailExists');
+						break;
+					default:
+						console.log('Error code not handled');
+				}
+			}
 			setIsLoading(false);
-			setDialogOpen('login');
 		})
 		.catch(er => {
 			setStatus("emailExists");
@@ -149,6 +166,11 @@ function RegisterDialog(props) {
 							if (status === "invalidFirstName")
 								setStatus(null);
 						}}
+						helperText={(() => {
+							if (status === "invalidFirstName")
+								return "Invalid first name";
+							return null;
+						})()}
 						FormHelperTextProps={{ error: true }}
 						InputLabelProps={{ required: false }}
 					/>
@@ -166,6 +188,11 @@ function RegisterDialog(props) {
 							if (status === "invalidLastName")
 								setStatus(null);
 						}}
+						helperText={(() => {
+							if (status === "invalidLastName")
+								return "Invalid last name";
+							return null;
+						})()}
 						FormHelperTextProps={{ error: true }}
 						InputLabelProps={{ required: false }}
 					/>

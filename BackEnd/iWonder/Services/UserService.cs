@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace iWonder.Services
 {
@@ -44,9 +45,15 @@ namespace iWonder.Services
 
         public ServerResult Register(RegistrationRequest model)
         {
+            if(!Regex.IsMatch(model.FirstName, @"^[\p{L}]+$"))
+                return new ServerResult { ErrorMessage = "First name must contain only letters", Code = (int)RegistrationErrors.InvalidFirstName };
+
+            if (!Regex.IsMatch(model.LastName, @"^[\p{L}]+$"))
+                return new ServerResult { ErrorMessage = "Last name must contain only letters", Code = (int)RegistrationErrors.InvalidLastName };
+
             var existingUser = _repository.User.GetUserByEmail(model.Email);
             if (existingUser != null)
-                return new ServerResult { ErrorMessage = "User with a specified email already exists" };
+                return new ServerResult { ErrorMessage = "User with a specified email already exists", Code = (int)RegistrationErrors.EmailInUse };
 
             var salt = SecurityHelper.GetSalt();
             var saltedHash = SecurityHelper.GenerateSaltedHash(Encoding.UTF8.GetBytes(model.Password), salt);

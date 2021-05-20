@@ -36,12 +36,7 @@ namespace iWonder.Controllers
         [HttpPost("Register")]
         public IActionResult Register(RegistrationRequest model)
         {
-            var response = _userService.Register(model);
-
-            if (!response.Success)
-                return BadRequest(new { message = response.ErrorMessage });
-
-            return Ok(response);
+            return Ok(_userService.Register(model));
         }
 
         [HttpGet("EmailExists")]
