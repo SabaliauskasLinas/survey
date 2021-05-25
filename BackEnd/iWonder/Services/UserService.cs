@@ -51,6 +51,14 @@ namespace iWonder.Services
             if (!Regex.IsMatch(model.LastName, @"^[\p{L}]+$"))
                 return new ServerResult { ErrorMessage = "Last name must contain only letters", Code = (int)RegistrationErrors.InvalidLastName };
 
+            if(model.Password.Length < 6)
+                return new ServerResult { ErrorMessage = "Password must contain at least 6 characters", Code = (int)RegistrationErrors.PasswordTooShort };
+
+            if(!Regex.IsMatch(model.Email, @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
+                + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
+                + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$"))
+                return new ServerResult { ErrorMessage = "Invalid email", Code = (int)RegistrationErrors.InvalidEmail };
+
             var existingUser = _repository.User.GetUserByEmail(model.Email);
             if (existingUser != null)
                 return new ServerResult { ErrorMessage = "User with a specified email already exists", Code = (int)RegistrationErrors.EmailInUse };

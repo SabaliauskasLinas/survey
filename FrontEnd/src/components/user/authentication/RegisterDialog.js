@@ -97,6 +97,12 @@ function RegisterDialog(props) {
 					case 2:
 						setStatus('emailExists');
 						break;
+					case 3:
+						setStatus('passwordTooShort');
+						break;
+					case 4:
+						setStatus('emailExists');
+						break;
 					default:
 						console.log('Error code not handled');
 				}

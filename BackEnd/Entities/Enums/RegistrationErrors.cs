@@ -9,5 +9,7 @@ namespace Entities.Enums
         InvalidFirstName,
         InvalidLastName,
         EmailInUse,
+        PasswordTooShort,
+        InvalidEmail,
     }
 }
